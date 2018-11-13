@@ -1,2 +1,9 @@
-# cs171-final-project
-The IRS's Final Project for CS171
+# CS171-final-project - The IRS
+
+## Styleguide
+
+### Colors
+
+Primary:
+Secondary:
+Tertiary:
