@@ -8,12 +8,11 @@ queue()
 function createVis(error) {
     if (error) { console.log(error); }
 
-    /*** Clean data ***/
-    // TODO
-
     /*** Create dashboards ***/
 
-    // Dashboard 1
+    /** Dashboard 1 **/
+
+    /* Clean data */
     // TODO
 
     /* Create visualization instances */
@@ -21,14 +20,18 @@ function createVis(error) {
 
     /* Bind event handlers */
 
-    // Dashboard 2
+    /** Dashboard 2 **/
+
+    /* Clean data */
     // TODO
 
     /* Create visualization instances */
 
     /* Bind event handlers */
 
-    // Dashboard 3
+    /** Dashboard 3 **/
+
+    /* Clean data */
     // TODO
 
     /* Create visualization instances */
