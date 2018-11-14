@@ -2,7 +2,7 @@
 
 ## Dev Guide
 
-ALWAYS USE BRANCHING. It will make the process easier. Make a PR onto master and merge at your own will, but let's not all dev off master.
+It's fine to work off master, just make sure to pull often and PUSH ONLY CODE THAT DOESN'T BREAK THE SITE.
 
 ## Styleguide
 
