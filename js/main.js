@@ -173,16 +173,13 @@ function createVis(error, financialData, crimeData, coinTreeJSON, txData) {
 
     /* Clean data */
     // Cleaned in Excel.
-    queue()
-        .defer(d3.json,"data/world-110m.json")
-        .defer(d3.csv, "data/attitude.csv")
-        .defer(d3.csv, "data/legality.csv")
-        .await(function(error, mapTopJson, data1, data2) {
-            var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
-          //  var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
-        });
 
+
+    d3.csv("data/legality.csv", function(data){
+        legality = data;
+    });
     /* Create visualization instances */
+    var regChoropleth = new Choropleth("choropleth", attitude, legality);
 
 
     /* Bind event handlers */
