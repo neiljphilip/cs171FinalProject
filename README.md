@@ -10,17 +10,17 @@ It's fine to work off master, just make sure to pull often and PUSH ONLY CODE TH
 
 Primary:
 
-	Charcoal- #4a484a
-	Gold - #eeb111
-	Gray - #969893
+Charcoal- #4a484a
+Gold - #eeb111
+Gray - #969893
 
 Secondary:
-	
-	Pastels:
-		Red - #ffb3ba
-		Orange - #ffdfba
-		Yellow - #ffffba
-		Green - #baffc9
-		Blue - #bae1ff
-test
+
+Pastels:
+Red - #ffb3ba
+Orange - #ffdfba
+Yellow - #ffffba
+Green - #baffc9
+Blue - #bae1ff
+
 Tertiary:
