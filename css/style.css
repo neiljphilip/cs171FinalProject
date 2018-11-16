@@ -6,7 +6,7 @@ body, html {
     font-family: 'Lato', sans-serif;
 }
 body {
-	background-color: #4a484a;
+	background-color: #262626;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -15,7 +15,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-	color: whitesmoke;-
+	color: whitesmoke;
 }
 
 .container {
@@ -25,3 +25,18 @@ p {
 /* TEXT - HEADERS, PARAGRAPHS */
 
 /* COMPONENTS - BUTTONS, FORMS, INPUTS */
+
+.axis text {
+    fill: whitesmoke;
+}
+
+.axis line, .axis .domain {
+    stroke: whitesmoke;
+}
+
+/* Dashboard 2 - Finance Data */
+
+.finance-line {
+    fill: none;
+    stroke: whitesmoke;
+}
