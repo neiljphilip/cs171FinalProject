@@ -78,17 +78,16 @@ function createVis(error, financialData) {
 
     /* Clean data */
     // Cleaned in Excel.
-    var attitude;
-    var legality;
-    d3.csv("data/attitude.csv", function(data){
-        attitude = data;
-    });
+    queue()
+        .defer(d3.json,"data/world-110m.json")
+        .defer(d3.csv, "data/attitude.csv")
+        .defer(d3.csv, "data/legality.csv")
+        .await(function(error, mapTopJson, data1, data2) {
+            var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
+        });
 
-    d3.csv("data/legality.csv", function(data){
-        legality = data;
-    });
     /* Create visualization instances */
-    var regChoropleth = new Choropleth("choropleth", attitude, legality);
+
 
     /* Bind event handlers */
 }
