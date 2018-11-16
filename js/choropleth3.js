@@ -4,12 +4,12 @@
  * @param _data	    		-- the actual data: perDayData
  * @param _eventHandler     -- event handler for this visualization (perhaps not necessary if a vis only reacts to, not triggers, events)
  */
-Choropleth = function(_parentElement, _data1, _data2,  _eventHandler) {
+Choropleth = function(_parentElement, _data1, _data2, _mapData) {
     this.parentElement = _parentElement;
     this.data1 = _data1;
     this.data2 = _data2;
-    this.eventHandler = _eventHandler;
-    this.filteredData = this.data;
+    this.mapData = _mapData;
+    console.log(this.mapData);
 
     this.initVis();
 };
@@ -18,7 +18,7 @@ Choropleth = function(_parentElement, _data1, _data2,  _eventHandler) {
  * Initialize visualization (static content, e.g. SVG area or axes)
  */
 
-ExampleVis.prototype.initVis = function() {
+Choropleth.prototype.initVis = function() {
     var vis = this;
 
     vis.margin = { top: 40, right: 40, bottom: 40, left: 40 };
@@ -43,12 +43,22 @@ ExampleVis.prototype.initVis = function() {
  * Data wrangling
  */
 
-ExampleVis.prototype.wrangleData = function() {
+Choropleth.prototype.wrangleData = function() {
     var vis = this;
 
     // Perform any data manipulation if necessary on the filtered data
-    vis.displayData = vis.filteredData;
+    vis.displayData = vis.data1;
+    console.log(vis.displayData);
+    console.log(vis.mapData);
+    vis.merc = topojson.feature(vis.mapData, vis.mapData.objects.countries).features;
 
+    vis.projection = d3.geoOrthographic()
+        .translate([vis.width / 2, vis.height / 2])
+        .scale([100]);
+
+// path generator
+    vis.path = d3.geoPath()
+        .projection(vis.projection);
     // Update the visualization
     vis.updateVis();
 };
@@ -58,9 +68,15 @@ ExampleVis.prototype.wrangleData = function() {
  * Function parameters only needed if different kinds of updates are needed
  */
 
-ExampleVis.prototype.updateVis = function() {
+Choropleth.prototype.updateVis = function() {
     var vis = this;
 
+    // Render the U.S. by using the path generator
+    vis.svg.selectAll("path")
+        .data(vis.merc)
+        .enter().append("path")
+        .attr("d", vis.path)
+        .style("fill", "purple");
     /* Draw vis using vis.displayData */
 
     // Enter, update, exit
@@ -75,10 +91,11 @@ ExampleVis.prototype.updateVis = function() {
  * E.g. brush, inputs, event trigger from another visualization in the dashboard (apply parameters as necessary)
  */
 
-ExampleVis.prototype.onUpdateData = function() {
+Choropleth.prototype.onUpdateData = function() {
     var vis = this;
 
     // Update vis.filteredData
 
     vis.wrangleData();
 };
+
