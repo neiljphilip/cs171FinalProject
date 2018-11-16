@@ -77,9 +77,18 @@ function createVis(error, financialData) {
     /** Dashboard 3 **/
 
     /* Clean data */
-    // TODO
+    // Cleaned in Excel.
+    var attitude;
+    var legality;
+    d3.csv("data/attitude.csv", function(data){
+        attitude = data;
+    });
 
+    d3.csv("data/legality.csv", function(data){
+        legality = data;
+    });
     /* Create visualization instances */
+    var regChoropleth = new Choropleth("choropleth", attitude, legality);
 
     /* Bind event handlers */
 }
