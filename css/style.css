@@ -34,6 +34,10 @@ p {
     stroke: whitesmoke;
 }
 
+.axis-label {
+    fill: whitesmoke;
+}
+
 /* Dashboard 2 - Finance Data */
 
 .finance-line {

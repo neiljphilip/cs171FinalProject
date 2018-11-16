@@ -56,6 +56,7 @@ FinanceTimeline.prototype.initVis = function() {
     vis.svg.append("text")
         .attr("x", -40)
         .attr("y", -8)
+        .attr('class', 'axis-label')
         .text("Crypto Valuations");
 
     vis.lineSvg = vis.svg.append('g')
@@ -66,7 +67,9 @@ FinanceTimeline.prototype.initVis = function() {
         .attr('class', 'candlesticks-group');
 
     // (Filter, aggregate, modify data)
-    vis.onUpdateData("bitcoin");
+    vis.updateCoin("bitcoin");
+    vis.updateView("historical");
+    vis.onUpdateFilters();
 };
 
 /*
@@ -90,10 +93,15 @@ FinanceTimeline.prototype.wrangleData = function() {
 
 FinanceTimeline.prototype.updateVis = function() {
     var vis = this;
-    console.log(vis.displayData);
 
     vis.x.domain(d3.extent(vis.displayData, function(d) { return d.Date; }));
-    vis.y.domain(d3.extent(vis.displayData, function(d) { return d.Open; }));
+    if (vis.chosenView === 'historical') {
+        vis.y.domain(d3.extent(vis.displayData, function(d) { return d.Open; }));
+    } else {
+        var minPrice = d3.min(vis.displayData, function(d) { return d.Low; });
+        var maxPrice = d3.max(vis.displayData, function(d) { return d.High; });
+        vis.y.domain([0.98 * minPrice, 1.02 * maxPrice])
+    }
 
     vis.line = d3.line()
         .x(function(d) { return vis.x(d.Date); })
@@ -110,20 +118,31 @@ FinanceTimeline.prototype.updateVis = function() {
     vis.svg.select(".x-axis").call(vis.xAxis);
     vis.svg.select(".y-axis").call(vis.yAxis);
 
-    vis.bars = vis.candlesSvg.selectAll('rect')
-        .data(vis.displayData);
+    if (vis.chosenView === 'historical') {
+        $('.candlesticks-group').empty();
+    } else {
+        // Don't show candlestick at edge of data
+        var barData = vis.displayData;
+        barData.pop();
+        barData.shift();
 
-    vis.bars.enter()
-        .append('rect')
-        .attr('class', 'candlestick')
-        .merge(vis.bars)
-        .attr('x', function(d) { return vis.x(d.Date); })
-        .attr('y', function(d) { return vis.y(d.Low); })
-        .attr('width', 5)
-        .attr('height', function(d) { return vis.height - vis.y(d.High); });
+        vis.bars = vis.candlesSvg.selectAll('rect')
+            .data(barData, function(d) { return d.Date; });
 
-    vis.bars.exit()
-        .remove();
+        vis.bars.enter()
+            .append('rect')
+            .attr('class', 'candlestick')
+            .merge(vis.bars)
+            .transition()
+            .duration(800)
+            .attr('x', function(d) { return vis.x(d.Date); })
+            .attr('y', function(d) { return vis.y(d.High); })
+            .attr('width', 5)
+            .attr('height', function(d) { return vis.y(d.Low) - vis.y(d.High); });
+
+        vis.bars.exit()
+            .remove();
+    }
 
     /* Draw vis using vis.displayData */
 
@@ -139,12 +158,70 @@ FinanceTimeline.prototype.updateVis = function() {
  * E.g. brush, inputs, event trigger from another visualization in the dashboard (apply parameters as necessary)
  */
 
-FinanceTimeline.prototype.onUpdateData = function(coin) {
+FinanceTimeline.prototype.onCoinChanged = function(coin) {
+    var vis = this;
+    vis.updateCoin(coin);
+    vis.onUpdateFilters();
+};
+
+FinanceTimeline.prototype.onViewChanged = function(view) {
+    var vis = this;
+    vis.updateView(view);
+    vis.onUpdateFilters();
+};
+
+FinanceTimeline.prototype.updateCoin = function(coin) {
     var vis = this;
 
     // Update vis.filteredData
     vis.chosenCoin = coin;
-    vis.filteredData = vis.data.filter(function(d) { return d.Coin === vis.chosenCoin; });
+    vis.coinData = vis.data.filter(function(d) { return d.Coin === vis.chosenCoin; });
+};
+
+FinanceTimeline.prototype.updateView = function(view) {
+    var vis = this;
+
+    // Update vis.filteredData
+    vis.chosenView = view;
+    // Historical defaults to entire view of coin
+    if (view === "historical") {
+        var dataRange = d3.extent(vis.coinData, function(d) { return d.Date; });
+        vis.selectionStart = dataRange[0];
+        vis.selectionEnd = dataRange[1];
+    } else { // Detailed view defaults to current month
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+        vis.selectionStart = firstDay;
+        vis.selectionEnd = lastDay;
+    }
+};
+
+/* Handles event brush triggers for Historical view */
+FinanceTimeline.prototype.onUpdateHistorical = function(selectionStart, selectionEnd) {
+    vis.selectionStart = selectionStart;
+    vis.selectionEnd = selectionEnd;
+};
+
+/* Handles event month changes for Detailed view */
+FinanceTimeline.prototype.onUpdateDetailed = function(month, year) {
+    var financeMonthParser = d3.timeParse("%m, %Y");
+    var date = financeMonthParser(month + ", " + year);
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    vis.selectionStart = firstDay;
+    vis.selectionEnd = lastDay;
+};
+
+FinanceTimeline.prototype.onUpdateFilters = function() {
+    var vis = this;
+
+    // Filtering down to correct time data
+    vis.filteredData = vis.coinData.filter(function(d){
+        return d.Date >= vis.selectionStart && d.Date <= vis.selectionEnd;
+    });
 
     vis.wrangleData();
 };

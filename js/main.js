@@ -1,5 +1,3 @@
-/* Parsers */
-var dateParser = d3.timeParse("%b %d, %Y");
 
 /* Load data */
 queue()
@@ -24,6 +22,7 @@ function createVis(error, financialData) {
     /** Dashboard 2 - Financial Data **/
 
     /* Clean data */
+    var financeDayParser = d3.timeParse("%b %d, %Y");
     var columns = ["Coin", "Date", "Open", "High", "Low", "Close", "Volume", "MarketCap"];
     var cryptoFinanceData = d3.csvParseRows(financialData).map(function(row, rowI) {
         return row.map(function(value, colI) {
@@ -32,7 +31,7 @@ function createVis(error, financialData) {
             } else if (colI > 5) {
                 return +(value.replace(/,/g, ''))
             } else if (colI === 1) {
-                return dateParser(value);
+                return financeDayParser(value);
             }
             return value;
         });
@@ -70,8 +69,18 @@ function createVis(error, financialData) {
     console.log(cryptoFinanceData);
 
     /* Create visualization instances */
-    var financeTimeline = new FinanceTimeline("finance-timeline", cryptoFinanceData);
+    var FinanceDashboardEventHandler = {};
+    var financeTimeline = new FinanceTimeline("finance-timeline", cryptoFinanceData, FinanceDashboardEventHandler);
 
+    d3.select('#coin-select').on('change', function() {
+        var coin = d3.select(this).property("value");
+        financeTimeline.onCoinChanged(coin);
+    });
+
+    d3.select('#view-select').on('change', function() {
+        var view = d3.select(this).property("value");
+        financeTimeline.onViewChanged(view);
+    });
     /* Bind event handlers */
 
     /** Dashboard 3 **/
