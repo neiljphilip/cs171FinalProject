@@ -5,10 +5,17 @@ body, html {
     height: 100%;
     font-family: 'Lato', sans-serif;
 }
+body {
+	background-color: #4a484a;
+}
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
-    color: red;
+    color: #eeb111;
+}
+
+p {
+	color: whitesmoke;-
 }
 
 .container {
