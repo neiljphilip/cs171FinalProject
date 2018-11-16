@@ -174,12 +174,8 @@ function createVis(error, financialData, crimeData, coinTreeJSON, txData) {
     /* Clean data */
     // Cleaned in Excel.
 
-
-    d3.csv("data/legality.csv", function(data){
-        legality = data;
-    });
     /* Create visualization instances */
-    var regChoropleth = new Choropleth("choropleth", attitude, legality);
+
 
 
     /* Bind event handlers */
