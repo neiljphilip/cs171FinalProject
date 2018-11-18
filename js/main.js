@@ -72,6 +72,7 @@ function createVis(error, financialData) {
     var FinanceDashboardEventHandler = {};
     var financeTimeline = new FinanceTimeline("finance-timeline", cryptoFinanceData, FinanceDashboardEventHandler);
 
+    /* Bind event handlers */
     d3.select('#coin-select').on('change', function() {
         var coin = d3.select(this).property("value");
         financeTimeline.onCoinChanged(coin);
@@ -81,7 +82,19 @@ function createVis(error, financialData) {
         var view = d3.select(this).property("value");
         financeTimeline.onViewChanged(view);
     });
-    /* Bind event handlers */
+
+    $(".detailed-arrows").on('click', function() {
+        var isDisabled = $(this).hasClass('disabled');
+        if (isDisabled) return;
+
+        var id = $(this).attr('id');
+        financeTimeline.updateDetailed(id === 'detailed-month-next');
+    });
+
+    $(FinanceDashboardEventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){
+        console.log(rangeStart);
+        console.log(rangeEnd);
+    });
 
     /** Dashboard 3 **/
 

@@ -10,6 +10,7 @@
 
 		<!-- CSS libraries -->
 		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
 		<!-- Custom CSS code -->
 		<link rel="stylesheet" href="css/style.css">
@@ -128,6 +129,15 @@
 									<option selected value="historical">Historical</option>
 									<option value="detailed">Detailed</option>
 								</select>
+								<div class="detailed-inputs">
+									<div class="detailed-arrows" id="detailed-month-prev">
+										<i class="fas fa-arrow-circle-left"></i>
+									</div>
+									<div id="detailed-month"></div>
+									<div class="detailed-arrows" id="detailed-month-next">
+										<i class="fas fa-arrow-circle-right"></i>
+									</div>
+								</div>
 								<div id="finance-timeline"></div>
 							</div>
 						</div>
@@ -184,6 +194,7 @@
 		<!-- <script src="js/examplevis.js"></script> -->
 		 <script src="js/financeTimeline.js"></script>
 		<script src="js/helpers.js"></script>
+		<script src="js/date.js"></script>
 
 		<!-- Custom JS file -->
 		<script src="js/main.js"></script>

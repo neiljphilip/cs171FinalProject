@@ -44,3 +44,45 @@ p {
     fill: none;
     stroke: whitesmoke;
 }
+
+rect.candlestick-rect.red, rect.candlestick-line.red {
+    fill: #ffb3ba;
+}
+
+rect.candlestick-rect.green, rect.candlestick-line.green {
+    fill: #baffc9;
+}
+
+.detailed-inputs {
+    display: flex;
+    align-items: center;
+}
+
+#detailed-month {
+    background-color: rgba(102, 102, 102, 0.4);
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: whitesmoke;
+    margin: 10px 15px;
+    width: 200px;
+    text-align: center;
+}
+
+.detailed-arrows i {
+    font-size: 24px;
+    color: white;
+    margin-top: 2px;
+}
+
+.detailed-arrows:hover {
+    cursor: pointer;
+}
+
+.detailed-arrows.disabled {
+    color: gray;
+    opacity: 0.5;
+}
+
+.detailed-arrows.disabled:hover {
+    cursor: not-allowed;
+}

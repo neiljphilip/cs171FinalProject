@@ -20,7 +20,7 @@ FinanceTimeline = function(_parentElement, _data, _eventHandler) {
 FinanceTimeline.prototype.initVis = function() {
     var vis = this;
 
-    vis.margin = { top: 40, right: 40, bottom: 40, left: 40 };
+    vis.margin = { top: 40, right: 40, bottom: 40, left: 70 };
 
     vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right,
         vis.height = 300 - vis.margin.top - vis.margin.bottom;
@@ -31,6 +31,14 @@ FinanceTimeline.prototype.initVis = function() {
         .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
         .append("g")
         .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
+
+    // SVG clipping path
+    vis.svg.append("defs")
+        .append("clipPath")
+        .attr("id", "clip")
+        .append("rect")
+        .attr("width", vis.width)
+        .attr("height", vis.height);
 
     // Scales, axes, and domains
     vis.x = d3.scaleTime()
@@ -46,6 +54,7 @@ FinanceTimeline.prototype.initVis = function() {
         .scale(vis.y)
         .ticks(10);
 
+    // Axes groups
     vis.svg.append("g")
         .attr("class", "x-axis axis")
         .attr("transform", "translate(0," + vis.height + ")");
@@ -53,22 +62,52 @@ FinanceTimeline.prototype.initVis = function() {
     vis.svg.append("g")
         .attr("class", "y-axis axis");
 
+    // Labels
     vis.svg.append("text")
         .attr("x", -40)
         .attr("y", -8)
         .attr('class', 'axis-label')
         .text("Crypto Valuations");
 
+    vis.svg.append('g')
+        .attr('class', 'axis-label')
+        .append('text')
+        .attr('x', -1 * vis.height + 60)
+        .attr('y', -50)
+        .attr('transform', 'rotate(-90)')
+        .text('Valuation (USD)');
+
+    // Line svg
     vis.lineSvg = vis.svg.append('g')
         .append('path')
         .attr('class', 'finance-line');
 
+    // Candlesticks svg
     vis.candlesSvg = vis.svg.append('g')
         .attr('class', 'candlesticks-group');
 
-    // (Filter, aggregate, modify data)
+    // Initialize filters
     vis.updateCoin("bitcoin");
     vis.updateView("historical");
+
+    // Initialize brushing component
+    vis.currentBrushRegion = null;
+    vis.brush = d3.brushX()
+        .extent([[0, 0], [vis.width, vis.height]])
+        .on("brush", function(){
+            // User just selected a specific region
+            vis.currentBrushRegion = d3.event.selection;
+            vis.currentBrushRegion = vis.currentBrushRegion.map(vis.x.invert);
+
+            // 3. Trigger the event 'selectionChanged' of our event handler
+            $(vis.eventHandler).trigger("selectionChanged", vis.currentBrushRegion);
+        });
+
+    // Append brush component here
+    vis.brushGroup = vis.svg.append("g")
+        .attr("class", "brush");
+
+    // (Filter, aggregate, modify data)
     vis.onUpdateFilters();
 };
 
@@ -97,10 +136,18 @@ FinanceTimeline.prototype.updateVis = function() {
     vis.x.domain(d3.extent(vis.displayData, function(d) { return d.Date; }));
     if (vis.chosenView === 'historical') {
         vis.y.domain(d3.extent(vis.displayData, function(d) { return d.Open; }));
+
+        // Call brush component here
+        vis.brushGroup.call(vis.brush)
+            .attr("clip-path", "url(#clip)");
+
+        $('.brush').show();
     } else {
         var minPrice = d3.min(vis.displayData, function(d) { return d.Low; });
         var maxPrice = d3.max(vis.displayData, function(d) { return d.High; });
-        vis.y.domain([0.98 * minPrice, 1.02 * maxPrice])
+        vis.y.domain([0.98 * minPrice, 1.02 * maxPrice]);
+
+        $('.brush').hide();
     }
 
     vis.line = d3.line()
@@ -121,26 +168,74 @@ FinanceTimeline.prototype.updateVis = function() {
     if (vis.chosenView === 'historical') {
         $('.candlesticks-group').empty();
     } else {
+        var barWidth = 6;
+        var lineWidth = 1;
+
         // Don't show candlestick at edge of data
         var barData = vis.displayData;
         barData.pop();
         barData.shift();
 
-        vis.bars = vis.candlesSvg.selectAll('rect')
+        // Draw the rectangles for the candlesticks
+        vis.candleBars = vis.candlesSvg.selectAll('rect.candlestick-rect')
             .data(barData, function(d) { return d.Date; });
 
-        vis.bars.enter()
+        vis.candleBars.enter()
             .append('rect')
-            .attr('class', 'candlestick')
-            .merge(vis.bars)
+            .attr('class', 'candlestick-rect')
+            .merge(vis.candleBars)
             .transition()
             .duration(800)
-            .attr('x', function(d) { return vis.x(d.Date); })
-            .attr('y', function(d) { return vis.y(d.High); })
-            .attr('width', 5)
-            .attr('height', function(d) { return vis.y(d.Low) - vis.y(d.High); });
+            .attr('x', function(d) { return vis.x(d.Date) - (barWidth / 2); })
+            .attr('y', function(d) {
+                if (d.Open >= d.Close) {
+                    return vis.y(d.Open);
+                }
+                return vis.y(d.Close);
+            })
+            .attr('width', barWidth)
+            .attr('height', function(d) {
+                if (d.Open >= d.Close) {
+                    return vis.y(d.Close) - vis.y(d.Open);
+                }
+                return vis.y(d.Open) - vis.y(d.Close);
+            })
+            .attr('class', function(d) {
+                if (d.Open >= d.Close) {
+                    return 'candlestick-rect red';
+                }
+                return 'candlestick-rect green';
+            });
 
-        vis.bars.exit()
+        vis.candleBars.exit()
+            .remove();
+
+        // Draw the lines for the candlesticks
+        vis.candleLines = vis.candlesSvg.selectAll('rect.candlestick-line')
+            .data(barData, function(d) { return d.Date; });
+
+        vis.candleLines.enter()
+            .append('rect')
+            .attr('class', 'candlestick-line')
+            .merge(vis.candleLines)
+            .transition()
+            .duration(800)
+            .attr('x', function(d) { return vis.x(d.Date) - (lineWidth / 2); })
+            .attr('y', function(d) {
+                return vis.y(d.High);
+            })
+            .attr('width', lineWidth)
+            .attr('height', function(d) {
+                return vis.y(d.Low) - vis.y(d.High);
+            })
+            .attr('class', function(d) {
+                if (d.Open >= d.Close) {
+                    return 'candlestick-line red';
+                }
+                return 'candlestick-line green';
+            });
+
+        vis.candleLines.exit()
             .remove();
     }
 
@@ -185,34 +280,74 @@ FinanceTimeline.prototype.updateView = function(view) {
     vis.chosenView = view;
     // Historical defaults to entire view of coin
     if (view === "historical") {
-        var dataRange = d3.extent(vis.coinData, function(d) { return d.Date; });
-        vis.selectionStart = dataRange[0];
-        vis.selectionEnd = dataRange[1];
+        $('.detailed-inputs').hide();
+        vis.initHistorical();
     } else { // Detailed view defaults to current month
-        var date = new Date();
-        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-        vis.selectionStart = firstDay;
-        vis.selectionEnd = lastDay;
+        $('.detailed-inputs').show();
+        vis.initDetailed();
     }
 };
 
 /* Handles event brush triggers for Historical view */
-FinanceTimeline.prototype.onUpdateHistorical = function(selectionStart, selectionEnd) {
-    vis.selectionStart = selectionStart;
-    vis.selectionEnd = selectionEnd;
+FinanceTimeline.prototype.initHistorical = function(selectionStart, selectionEnd) {
+    var vis = this;
+
+    var dataRange = d3.extent(vis.coinData, function(d) { return d.Date; });
+    vis.selectionStart = dataRange[0];
+    vis.selectionEnd = dataRange[1];
 };
 
 /* Handles event month changes for Detailed view */
-FinanceTimeline.prototype.onUpdateDetailed = function(month, year) {
-    var financeMonthParser = d3.timeParse("%m, %Y");
-    var date = financeMonthParser(month + ", " + year);
-    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+FinanceTimeline.prototype.initDetailed = function() {
+    var vis = this;
+
+    // Initialize to last month of that coin's data
+    var date = d3.max(vis.coinData, function(d) { return d.Date; });
+    // Show 4 months in detailed view
+    var firstDay = new Date(date.getFullYear(), date.getMonth() - 3, 1);
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
     vis.selectionStart = firstDay;
     vis.selectionEnd = lastDay;
+
+    vis.updateDetailInputs(vis.selectionStart, vis.selectionEnd);
+};
+
+FinanceTimeline.prototype.updateDetailInputs = function(start, end) {
+    var vis = this;
+
+    var dateFormatter = d3.timeFormat("%Y");
+    var firstDate = monthNames[start.getMonth()] + ", " + dateFormatter(start);
+    var secondDate = monthNames[end.getMonth()] + ", " + dateFormatter(end);
+    $('#detailed-month').text(firstDate + ' - ' + secondDate);
+
+    var isMoreForward = d3.max(vis.coinData, function(d) { return d.Date; }) > end;
+    var isMoreBackward = d3.min(vis.coinData, function(d) { return d.Date; }) < start;
+
+    if (isMoreForward && $('#detailed-month-next').hasClass('disabled')) {
+        $('#detailed-month-next').removeClass('disabled');
+    } else if (!isMoreForward  && !$('#detailed-month-next').hasClass('disabled')) {
+        $('#detailed-month-next').addClass('disabled');
+    }
+
+    if (isMoreBackward && $('#detailed-month-prev').hasClass('disabled')) {
+        $('#detailed-month-prev').removeClass('disabled');
+    } else if (!isMoreBackward  && !$('#detailed-month-prev').hasClass('disabled')) {
+        $('#detailed-month-prev').addClass('disabled');
+    }
+};
+
+FinanceTimeline.prototype.updateDetailed = function(moveForward) {
+    var vis = this;
+
+    // Move forward or backward 4 months
+    var monthsToMove = moveForward ? 4 : -4;
+
+    vis.selectionStart = vis.selectionStart.add(monthsToMove).month();
+    vis.selectionEnd = vis.selectionEnd.add(monthsToMove).month();
+
+    vis.updateDetailInputs(vis.selectionStart, vis.selectionEnd);
+    vis.onUpdateFilters();
 };
 
 FinanceTimeline.prototype.onUpdateFilters = function() {
