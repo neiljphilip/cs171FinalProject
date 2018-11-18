@@ -38,11 +38,51 @@ p {
     fill: whitesmoke;
 }
 
+.anchor-right {
+    text-anchor: end;
+}
+
+.caption-label {
+    font-size: 10px;
+    fill: lightgray;
+}
+
+button {
+    background-color: #8c8c8c;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #666666;
+    cursor: pointer;
+}
+
+button:active, button:focus {
+    outline: none;
+}
+
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 5px 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: whitesmoke;
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.d3-tip p {
+    margin: 5px 0;
+    padding: 0;
+}
+
 /* Dashboard 2 - Finance Data */
 
 .finance-line {
     fill: none;
-    stroke: whitesmoke;
 }
 
 rect.candlestick-rect.red, rect.candlestick-line.red {
@@ -51,6 +91,11 @@ rect.candlestick-rect.red, rect.candlestick-line.red {
 
 rect.candlestick-rect.green, rect.candlestick-line.green {
     fill: #baffc9;
+}
+
+.detailed-inputs-wrapper {
+    display: inline-block;
+    margin-left: 15px;
 }
 
 .detailed-inputs {
@@ -63,26 +108,63 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     border-radius: 5px;
     padding: 5px 10px;
     color: whitesmoke;
-    margin: 10px 15px;
+    margin: 0 15px;
     width: 200px;
     text-align: center;
+    font-size: 12px;
 }
 
-.detailed-arrows i {
-    font-size: 24px;
-    color: white;
+.detailed-inputs i {
+    font-size: 20px;
+    color: whitesmoke;
     margin-top: 2px;
 }
 
-.detailed-arrows:hover {
+.detailed-arrows:not(.disabled):hover, #detailed-info:hover {
     cursor: pointer;
+    opacity: 0.9;
 }
 
-.detailed-arrows.disabled {
-    color: gray;
-    opacity: 0.5;
+.detailed-arrows.disabled i {
+    color: #8c8c8c;
 }
 
 .detailed-arrows.disabled:hover {
     cursor: not-allowed;
+}
+
+.tooltip-rect {
+    fill: whitesmoke;
+}
+
+.focus-rect:hover {
+    cursor: pointer;
+}
+
+.tooltip-date {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.tooltip-text {
+    fill: black;
+    font-size: 10px;
+}
+
+#detailed-info {
+    margin-left: 10px;
+}
+
+.candlestick-svg {
+    width: 300px;
+}
+
+.square-label {
+    font-size: 10px;
+    fill: whitesmoke;
+}
+
+.treemap-rect:hover {
+    cursor: pointer;
+    opacity: 0.9;
 }

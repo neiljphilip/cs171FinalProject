@@ -11,6 +11,7 @@
 		<!-- CSS libraries -->
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/tippy.css">
 
 		<!-- Custom CSS code -->
 		<link rel="stylesheet" href="css/style.css">
@@ -107,35 +108,31 @@
 					<div id="finance-dashboard">
 						<div class="row">
 							<div class="col-6">
-								<div id="dashboard2-vis1"></div>
+								<div id="finance-treemap"></div>
 							</div>
 							<div class="col-6">
-								<div id="dashboard2-vis2"></div>
+								<button type="button" id="finance-absolute-button">Absolute</button>
+								<button type="button" id="finance-percent-button">Percentage</button>
+								<div id="finance-volume-chart"></div>
 							</div>
 							<div class="col-12">
-								<select id="coin-select">
-									<option selected value="bitcoin">Bitcoin</option>
-									<option value="ethereum">Ethereum</option>
-									<option value="litecoin">Litecoin</option>
-									<option value="ripple">Ripple</option>
-									<option value="bitcoin-cash">Bitcoin Cash</option>
-									<option value="stellar">Stellar</option>
-									<option value="eos">EOS</option>
-									<option value="tether">Tether</option>
-									<option value="cardano">Cardano</option>
-									<option value="monero">Monero</option>
-								</select>
-								<select id="view-select">
-									<option selected value="historical">Historical</option>
-									<option value="detailed">Detailed</option>
-								</select>
-								<div class="detailed-inputs">
-									<div class="detailed-arrows" id="detailed-month-prev">
-										<i class="fas fa-arrow-circle-left"></i>
-									</div>
-									<div id="detailed-month"></div>
-									<div class="detailed-arrows" id="detailed-month-next">
-										<i class="fas fa-arrow-circle-right"></i>
+								<button type="button" id="finance-historical-button">Historical View</button>
+								<button type="button" id="finance-detailed-button">Detailed View</button>
+								<div class="detailed-inputs-wrapper">
+									<div class="detailed-inputs">
+										<div class="detailed-arrows" id="detailed-month-prev">
+											<i class="fas fa-arrow-circle-left"></i>
+										</div>
+										<div id="detailed-month"></div>
+										<div class="detailed-arrows" id="detailed-month-next">
+											<i class="fas fa-arrow-circle-right"></i>
+										</div>
+										<div id="detailed-info">
+											<i class="far fa-question-circle"></i>
+										</div>
+										<div id="detailed-info-popper">
+											<img src="img/candlestick.svg" class="candlestick-svg">
+										</div>
 									</div>
 								</div>
 								<div id="finance-timeline"></div>
@@ -189,12 +186,19 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/queue.v1.min.js"></script>
 		<script src="js/d3.min.js"></script>
+		<script src="js/d3-tip.js"></script>
+		<script src="js/date.js"></script>
+		<script src="js/tippy.min.js"></script>
+
+		<!-- Helper JS file -->
+		<script src="js/helpers.js"></script>
 
 		<!-- Visualization objects -->
 		<!-- <script src="js/examplevis.js"></script> -->
-		 <script src="js/financeTimeline.js"></script>
-		<script src="js/helpers.js"></script>
-		<script src="js/date.js"></script>
+		<script src="js/financeTimeline.js"></script>
+		<script src="js/financeVolume.js"></script>
+		<script src="js/financeTreemap.js"></script>
+
 
 		<!-- Custom JS file -->
 		<script src="js/main.js"></script>

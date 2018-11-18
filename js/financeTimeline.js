@@ -67,7 +67,7 @@ FinanceTimeline.prototype.initVis = function() {
         .attr("x", -40)
         .attr("y", -8)
         .attr('class', 'axis-label')
-        .text("Crypto Valuations");
+        .attr('id', 'chart-title');
 
     vis.svg.append('g')
         .attr('class', 'axis-label')
@@ -76,6 +76,12 @@ FinanceTimeline.prototype.initVis = function() {
         .attr('y', -50)
         .attr('transform', 'rotate(-90)')
         .text('Valuation (USD)');
+
+    vis.svg.append("text")
+        .attr("x", -40)
+        .attr("y", vis.height + 30)
+        .attr('class', 'axis-label caption-label')
+        .text('Drag a box on the timeline to do a deep-dive.');
 
     // Line svg
     vis.lineSvg = vis.svg.append('g')
@@ -157,7 +163,10 @@ FinanceTimeline.prototype.updateVis = function() {
     vis.lineSvg.datum(vis.displayData)
         .transition()
         .duration(800)
-        .attr('d', vis.line);
+        .attr('d', vis.line)
+        .attr('stroke', function(d) {
+            return coinColorScale(d[0].Coin);
+        });
 
     vis.lineSvg.exit()
         .remove();
@@ -271,6 +280,8 @@ FinanceTimeline.prototype.updateCoin = function(coin) {
     // Update vis.filteredData
     vis.chosenCoin = coin;
     vis.coinData = vis.data.filter(function(d) { return d.Coin === vis.chosenCoin; });
+    vis.svg.select('#chart-title')
+        .text(coin);
 };
 
 FinanceTimeline.prototype.updateView = function(view) {
@@ -295,6 +306,8 @@ FinanceTimeline.prototype.initHistorical = function(selectionStart, selectionEnd
     var dataRange = d3.extent(vis.coinData, function(d) { return d.Date; });
     vis.selectionStart = dataRange[0];
     vis.selectionEnd = dataRange[1];
+
+    $(vis.eventHandler).trigger("selectionChanged", [vis.selectionStart, vis.selectionEnd]);
 };
 
 /* Handles event month changes for Detailed view */
@@ -315,6 +328,8 @@ FinanceTimeline.prototype.initDetailed = function() {
 
 FinanceTimeline.prototype.updateDetailInputs = function(start, end) {
     var vis = this;
+
+    $(vis.eventHandler).trigger("selectionChanged", [start, end]);
 
     var dateFormatter = d3.timeFormat("%Y");
     var firstDate = monthNames[start.getMonth()] + ", " + dateFormatter(start);

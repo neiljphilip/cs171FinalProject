@@ -1,3 +1,5 @@
+// Coin colors
+var coinColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 
 /* Load data */
 queue()
@@ -56,31 +58,34 @@ function createVis(error, financialData) {
             var totalVolume = d3.sum(d, function(v) { return v.Volume; });
             var data = {};
             d.forEach(function(v) {
-                v.VolumePercent = v.Volume / totalVolume;
+                v.VolumePercent = v.Volume / totalVolume * 100;
                 data[v.Coin] = v;
             });
             return data;
         })
-        .object(cryptoFinanceData);
+        .entries(cryptoFinanceData);
+    financeByDate.sort(function(a,b) { return new Date(a.key) - new Date(b.key); });
+    // No volume data before Dec 27th, 2013
+    financeByDate = financeByDate.filter(function(d) { return new Date(d.key) >= new Date(2013, 11, 27); });
 
-    cryptoFinanceData.forEach(function(d) {
-        d.VolumePercent = financeByDate[d.Date][d.Coin].VolumePercent;
-    });
+    allCoins = Array.from([... new Set(cryptoFinanceData.map(function(d) { return d.Coin; }))]);
+    coinColorScale.domain(allCoins);
     console.log(cryptoFinanceData);
+    // console.log(volumeByData);
 
     /* Create visualization instances */
     var FinanceDashboardEventHandler = {};
     var financeTimeline = new FinanceTimeline("finance-timeline", cryptoFinanceData, FinanceDashboardEventHandler);
+    var financeVolumeChart = new FinanceVolumeChart("finance-volume-chart", financeByDate, FinanceDashboardEventHandler);
+    var financeTreemap = new FinanceTreemap("finance-treemap", cryptoFinanceData, FinanceDashboardEventHandler);
 
     /* Bind event handlers */
-    d3.select('#coin-select').on('change', function() {
-        var coin = d3.select(this).property("value");
-        financeTimeline.onCoinChanged(coin);
+    $('#finance-historical-button').on('click', function() {
+        financeTimeline.onViewChanged('historical');
     });
 
-    d3.select('#view-select').on('change', function() {
-        var view = d3.select(this).property("value");
-        financeTimeline.onViewChanged(view);
+    $('#finance-detailed-button').on('click', function() {
+        financeTimeline.onViewChanged('detailed');
     });
 
     $(".detailed-arrows").on('click', function() {
@@ -91,9 +96,24 @@ function createVis(error, financialData) {
         financeTimeline.updateDetailed(id === 'detailed-month-next');
     });
 
+    $('#finance-absolute-button').on('click', function() {
+      financeVolumeChart.onUpdateView('absolute');
+    });
+
+    $('#finance-percent-button').on('click', function() {
+        financeVolumeChart.onUpdateView('percent');
+    });
+
+    tippy(document.querySelector("#detailed-info"), {
+        content: document.querySelector('#detailed-info-popper')
+    });
+
     $(FinanceDashboardEventHandler).bind("selectionChanged", function(event, rangeStart, rangeEnd){
-        console.log(rangeStart);
-        console.log(rangeEnd);
+        financeVolumeChart.onUpdateData(rangeStart, rangeEnd);
+    });
+
+    $(FinanceDashboardEventHandler).bind("coinChanged", function(event, coin){
+        financeTimeline.onCoinChanged(coin);
     });
 
     /** Dashboard 3 **/
