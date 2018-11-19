@@ -84,6 +84,7 @@ function createVis(error, financialData) {
         .defer(d3.csv, "data/legality.csv")
         .await(function(error, mapTopJson, data1, data2) {
             var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
+          //  var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
         });
 
     /* Create visualization instances */
