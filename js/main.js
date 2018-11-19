@@ -174,6 +174,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, txData) {
     /* Clean data */
     // Cleaned in Excel.
 
+
     /* Create visualization instances */
 
 
