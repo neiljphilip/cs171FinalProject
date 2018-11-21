@@ -66,6 +66,7 @@ BarChart.prototype.initVis = function(){
 	//title
 	vis.svg.append("text")
 		.text("Loss to Criminal Activity ($M)")
+    .attr("class", "kennyText")
 		.attr("dx", vis.width)
 		.attr("text-anchor", "end")
 		.attr("dy", 0);
@@ -131,7 +132,7 @@ BarChart.prototype.updateVis = function(){
 	vis.svg.selectAll(".text")
 		.data(vis.data)
 		.enter().append("text")
-		.attr("class", "text")
+		.attr("class", "kennyText")
 		.attr("dy", function(d) {return vis.y(d.crime) + (vis.y.bandwidth()/2);})
 		.attr("text-anchor", "right")
 		.merge(vis.svg.selectAll(".text").data(vis.data))
