@@ -150,16 +150,21 @@
 			<div class="row">
 				<div class="col-12">
 					<div>
-						<h1>[Choropleth dashboard]</h1>
+						<h1>Central Governments in a Decentralized World</h1>
 						<p>[Dashboard supplementary start text]</p>
 					</div>
 					<div id="dashboard3">
 						<div class="row">
 							<div class="col-6">
-								<div id="dashboard3-vis1"></div>
+								<div><label for="animate">animate:</label>
+									<input id="animate" type="checkbox" checked>
+								</div>
+								<div id="choropleth"></div>
 							</div>
 							<div class="col-6">
-								<div id="dashboard3-vis2"></div>
+								<div id="dashboard3-vis2">
+									<p>[Placeholder: Textbox data that appears on interactive click of choropleth!]</p>
+								</div>
 							</div>
 							<div class="col-12">
 								<div id="dashboard3-vis3"></div>
@@ -226,6 +231,7 @@
 		<script src="js/d3-tip.js"></script>
 		<script src="js/date.js"></script>
 		<script src="js/tippy.min.js"></script>
+		<script src="js/topojson.min.js"></script>
 
 		<!-- Helper JS file -->
 		<script src="js/helpers.js"></script>
@@ -236,7 +242,12 @@
 		<script src="js/financeTimeline.js"></script>
 		<script src="js/financeVolume.js"></script>
 		<script src="js/financeTreemap.js"></script>
+		<script src="js/animated3.js"></script>
+		<script src="js/choropleth3.js"></script>
 
+		<!-- Visualization objects -->
+		<!-- <script src="js/examplevis.js"></script> -->
+		 <script src="js/financeTimeline.js"></script>
 
 		<!-- Custom JS file -->
 		<script src="js/main.js"></script>
