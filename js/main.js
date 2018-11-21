@@ -75,7 +75,7 @@ function createVis(error, financialData, crimeData) {
 
     allCoins = Array.from([... new Set(cryptoFinanceData.map(function(d) { return d.Coin; }))]);
     coinColorScale.domain(allCoins);
-    console.log(cryptoFinanceData);
+    // console.log(cryptoFinanceData);
     // console.log(volumeByData);
 
     /* Create visualization instances */
@@ -119,6 +119,38 @@ function createVis(error, financialData, crimeData) {
 
     $(FinanceDashboardEventHandler).bind("coinChanged", function(event, coin){
         financeTimeline.onCoinChanged(coin);
+    });
+
+    // Set up tooltips for finance notable events
+    $('.number-circle').each(function(i, el) {
+        var eventId = $(el).text();
+        var event = financeEvents[eventId];
+
+        var popupID = "finance-event-popup-" + eventId;
+        var popup = "<div class='finance-event-popup' id='" + popupID + "'>" +
+            "<p class='popup-title'>" + event.title + "</p>" +
+            "<em><p class='popup-date'>" + event.keyDate + "</p></em>" +
+            "<p>" + event.content + "</p>" +
+            "</div>";
+        $('.finance-events').append(popup);
+
+        tippy(document.querySelector("#f-popup-" + eventId), {
+            content: document.querySelector('#' + popupID),
+            hideOnClick: false
+        });
+    });
+
+    $('.number-circle').on('click', function() {
+        var eventId = $(this).text();
+        // financeEvents is in helpers.js
+        var event = financeEvents[eventId];
+        var dateParser = d3.timeParse("%m %d, %Y");
+
+        financeTimeline.updateCoin(event.coin);
+        financeTimeline.updateView("detailed");
+        financeTimeline.updateDetailedWithDates(dateParser(event.dates[0]), dateParser(event.dates[1]));
+
+        financeVolumeChart.onUpdateView(event.volumeType);
     });
 
     /** Dashboard 3 **/

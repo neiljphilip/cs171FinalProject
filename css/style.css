@@ -87,6 +87,10 @@ button:active, button:focus {
 
 /* Dashboard 2 - Finance Data */
 
+#finance-chart-title {
+    font-size: 20px;
+}
+
 .finance-line {
     fill: none;
 }
@@ -173,4 +177,48 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 .treemap-rect:hover {
     cursor: pointer;
     opacity: 0.9;
+}
+
+.number-circle {
+    transition: 0.3s;
+}
+
+.number-circle:hover {
+    cursor: pointer;
+    background: gray;
+}
+
+.number-circle:focus {
+    outline: none;
+}
+
+.finance-events p {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.finance-events .number-circle {
+    display: inline-block;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    padding-right: 1px;
+    border: 2px solid #666;
+    color: whitesmoke;
+    text-align: center;
+    font-size: 14px;
+    margin: 0 3px;
+}
+
+.finance-event-popup .popup-title {
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.finance-event-popup .popup-date {
+    margin: 0;
+    padding: 5px 0 15px;
 }
