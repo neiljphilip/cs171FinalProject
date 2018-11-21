@@ -21,6 +21,12 @@ p {
 .container {
     padding: 2% 0;
 }
+.bar {
+  fill: #ffb3ba;
+}
+text {
+  fill: whitesmoke;
+}
 
 /* TEXT - HEADERS, PARAGRAPHS */
 

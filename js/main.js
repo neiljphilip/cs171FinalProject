@@ -4,11 +4,16 @@ var coinColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 /* Load data */
 queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
+    .defer(d3.csv, "data/crime.csv")
     .await(createVis);
 
-function createVis(error, financialData) {
+function createVis(error, financialData, crimeData) {
     if (error) { console.log(error); }
-
+    //https://howmuch.net/articles/biggest-crypto-hacks-scams
+    for (var i in crimeData){
+      crimeData[i].loss = +crimeData[i].loss;
+    }
+    console.log(crimeData);
     /*** Create dashboards ***/
 
     /** Dashboard 1 **/
@@ -124,4 +129,7 @@ function createVis(error, financialData) {
     /* Create visualization instances */
 
     /* Bind event handlers */
+
+    //Extra vizualiazations
+    var cChart = new BarChart("crimeChart", crimeData);
 }
