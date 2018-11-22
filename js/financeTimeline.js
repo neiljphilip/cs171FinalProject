@@ -105,6 +105,7 @@ FinanceTimeline.prototype.initVis = function() {
             vis.currentBrushRegion = d3.event.selection;
             vis.currentBrushRegion = vis.currentBrushRegion.map(vis.x.invert);
 
+            vis.updateSelectionText(vis.currentBrushRegion[0], vis.currentBrushRegion[1]);
             // 3. Trigger the event 'selectionChanged' of our event handler
             $(vis.eventHandler).trigger("selectionChanged", vis.currentBrushRegion);
         });
@@ -149,6 +150,9 @@ FinanceTimeline.prototype.updateVis = function() {
         vis.brushGroup.call(vis.brush)
             .attr("clip-path", "url(#clip)");
 
+        if (vis.currentBrushRegion) {
+            vis.updateSelectionText(vis.currentBrushRegion[0], vis.currentBrushRegion[1]);
+        }
         $('.brush').show();
     } else {
         // Details shows domain of the display data, which is filtered by the chosen dates
@@ -295,10 +299,12 @@ FinanceTimeline.prototype.updateView = function(view) {
     vis.chosenView = view;
     // Historical defaults to entire view of coin
     if (view === "historical") {
-        $('.detailed-inputs').hide();
+        $('.detailed-arrows').hide();
+        $('#detailed-info').hide();
         vis.initHistorical();
     } else { // Detailed view defaults to current month
-        $('.detailed-inputs').show();
+        $('.detailed-arrows').show();
+        $('#detailed-info').show();
         vis.initDetailed();
     }
 };
@@ -312,6 +318,7 @@ FinanceTimeline.prototype.initHistorical = function(selectionStart, selectionEnd
     vis.selectionStart = dataRange[0];
     vis.selectionEnd = dataRange[1];
 
+    vis.updateSelectionText(vis.selectionStart, vis.selectionEnd);
     $(vis.eventHandler).trigger("selectionChanged", [vis.selectionStart, vis.selectionEnd]);
 };
 
@@ -331,15 +338,19 @@ FinanceTimeline.prototype.initDetailed = function() {
     vis.updateDetailInputs(vis.selectionStart, vis.selectionEnd);
 };
 
+FinanceTimeline.prototype.updateSelectionText = function(start, end) {
+    var dateFormatter = d3.timeFormat(" %d, %Y");
+    var firstDate = monthNames[start.getMonth()] + dateFormatter(start);
+    var secondDate = monthNames[end.getMonth()] + dateFormatter(end);
+    $('#detailed-month').text(firstDate + ' - ' + secondDate);
+};
+
 FinanceTimeline.prototype.updateDetailInputs = function(start, end) {
     var vis = this;
 
     $(vis.eventHandler).trigger("selectionChanged", [start, end]);
 
-    var dateFormatter = d3.timeFormat("%Y");
-    var firstDate = monthNames[start.getMonth()] + ", " + dateFormatter(start);
-    var secondDate = monthNames[end.getMonth()] + ", " + dateFormatter(end);
-    $('#detailed-month').text(firstDate + ' - ' + secondDate);
+    vis.updateSelectionText(start, end);
 
     var isMoreForward = d3.max(vis.coinData, function(d) { return d.Date; }) > end;
     var isMoreBackward = d3.min(vis.coinData, function(d) { return d.Date; }) < start;

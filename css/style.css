@@ -124,6 +124,10 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     font-size: 12px;
 }
 
+#detailed-info:hover {
+    outline: none;
+}
+
 .detailed-inputs i {
     font-size: 20px;
     color: whitesmoke;

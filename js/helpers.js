@@ -31,5 +31,13 @@ const financeEvents = {
         "volumeType": "absolute",
         "title": "Great Crypto Crash",
         "content": "From January 6th to February 6th, the price of Bitcoin fell nearly 65%. By September 2018, cryptocurrencies as a whole had collapsed 80% from their peaks in January, making this crash worse than the Dot-com Bubble's 78% collapse."
+    },
+    "5": {
+        "dates": ["03 01, 2018", "05 30, 2018"],
+        "keyDate": "April 2018",
+        "coin": "eos",
+        "volumeType": "absolute",
+        "title": "April Hike",
+        "content": "The cryptocurrency market saw a short-lived bump in April of 2018 as the market rose about 30%. So-called 'alternative' coins did particular well, such as EOS with a 300% gain in a couple months."
     }
 };
