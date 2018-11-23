@@ -75,6 +75,9 @@ dragGlobe.prototype.initVis = function() {
         .data(vis.countries)
         .enter().append("path")
         .attr("class", "land")
+        /*.style("fill", function() {
+            return "d3d3d3";
+        })*/
         .attr("d", vis.path)
 
     //Drag event
