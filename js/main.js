@@ -86,7 +86,8 @@ function createVis(error, financialData) {
         .await(function(error, mapTopJson, worldTsv, data1, data2) {
             //var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
            // var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
-            var globe = new dragGlobe("choropleth", mapTopJson, worldTsv);
+            console.log(data1);
+            var globe = new dragGlobe("choropleth", mapTopJson, worldTsv, data1, data2);
         });
 
     /* Create visualization instances */
