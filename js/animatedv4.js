@@ -4,10 +4,12 @@
  * @param _data	    		-- the actual data: perDayData
  * @param _eventHandler     -- event handler for this visualization (perhaps not necessary if a vis only reacts to, not triggers, events)
  */
-dragGlobe = function(_parentElement, _data1, _data2) {
+dragGlobe = function(_parentElement, _data1, _data2, _data3, _data4) {
     this.parentElement = _parentElement;
     this.world = _data1;
     this.countryName = _data2;
+    this.attitude = _data3;
+    this.legality = _data4;
 
     this.initVis();
 };
@@ -80,18 +82,49 @@ dragGlobe.prototype.initVis = function() {
     .call(d3.drag()
         .subject(function() { var r = vis.projection.rotate(); return {x: r[0] / vis.sens, y: -r[1] / vis.sens}; })
         .on("drag", function() {
+            vis.timer.stop();
             vis.rotate = vis.projection.rotate();
             vis.projection.rotate([d3.event.x * vis.sens, -d3.event.y * vis.sens, vis.rotate[2]]);
             vis.svg.selectAll("path.land").attr("d", vis.path);
             vis.svg.selectAll(".focused").classed("focused", vis.focused = false);
+         //   spinning_globe();
         }))
 
         .on("mouseover", function(d) {
-            vis.countryTooltip.text(vis.countryById[d.id])
+            var countryN = vis.countryById[d.id];
+            vis.countryTooltip.text(countryN)
                 .style("left", (d3.event.pageX + 7) + "px")
                 .style("top", (d3.event.pageY - 15) + "px")
                 .style("display", "block")
                 .style("opacity", 1);
+
+
+            var css = '.land:hover { fill: #d3d3d3 }';
+            // may break if country not in data!
+            var attitude = getAtt(countryN);
+
+            if (attitude == "permissive") {
+                css = '.land:hover { fill: green }';
+            } else if (attitude == "contentious") {
+                css = '.land:hover { fill: yellow }';
+            } else if (attitude == "hostile") {
+                css = '.land:hover { fill: red }';
+            } else if (attitude == "none") {
+                css = '.land:hover { fill: #d3d3d3 }';
+            }
+
+            else css = '.land:hover { fill: red }';
+
+            var style = document.createElement('style');
+
+            if (style.styleSheet) {
+                style.styleSheet.cssText = css;
+            } else {
+                style.appendChild(document.createTextNode(css));
+            }
+
+            document.getElementsByTagName('head')[0].appendChild(style);
+
         })
         .on("mouseout", function(d) {
             vis.countryTooltip.style("opacity", 0)
@@ -102,6 +135,8 @@ dragGlobe.prototype.initVis = function() {
                 .style("top", (d3.event.pageY - 15) + "px");
         });
 
+
+
     // modified from http://bl.ocks.org/cyrilcherian/8f573be5c2dbc6620fedad8f7b1e247d/3fbb024bcfff8c2d0fe49f78deda74c29d42d1d3
 
     function spinning_globe(){
@@ -111,7 +146,7 @@ dragGlobe.prototype.initVis = function() {
         var velocity = [.015, -0];
 
 
-        d3.timer(t => {
+       vis.timer = d3.timer(t => {
 
             // get current time
             var dt = Date.now() - time;
@@ -129,7 +164,15 @@ dragGlobe.prototype.initVis = function() {
     spinning_globe();
 
 
+    function getAtt(countryN) {
+        var att = vis.attitude[vis.attitude.findIndex(item => item.Nation === countryN)];
+        if (att === undefined) {
+            return "none";
+        } else {
+            return att.Status;
+        }
 
+    }
 
 
 
@@ -181,3 +224,4 @@ dragGlobe.prototype.onUpdateData = function() {
 
     vis.wrangleData();
 };
+

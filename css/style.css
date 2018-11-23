@@ -325,14 +325,7 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     stroke-width: 0.7px;
 }
 
-.land:hover {
-    fill:#33CC33;
-    stroke-width: 1px;
-}
 
-.focused {
-    fill: #33CC33;
-}
 
 select {
     position: absolute;
