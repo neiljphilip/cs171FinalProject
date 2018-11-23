@@ -51,74 +51,67 @@
 				    However, with the advent of Coinbase in late 2012, the ability to purchase cryptocurrencies through smartphones started to get the ball rolling for average investors who didn’t want to worry about the technical aspects of the market. Since 2012, Coinbase has grown to harbor over 15 million active users, and the value of currencies themselves have also grown exponentially along with the increase of users throughout the last decade.
 					</p>
 				</div>
+			</div>
+			<div class="row section">
 				<div class="col-12">
-					<h2>[dashboard of coins/marketcap/valuation/etc]</h2>
-					<div class="row">
-						<div class="col-12">
-							<div>
-								<h1>Coin Market</h1>
-								<p>There have been distinct eras withing the decade long history of
-									 cryptocurrency. The early hobby era from the launch of Bitcoin in 2009
-								 to the foundation of the two trading platforms: Mt. Gox and the Silk Road marketplace.
-							   The period of growth crashed horribly when both exchanges collapsed and Bitcoin dropped from $1000 to
-							 	just under $300.<br /><br />
-								Then, in 2014-2016, there was a diversification of crypto from only Bitcoin to Ethereum and other platforms
-							  using crypto as a vehicle for providing decentralized services. The days of blockchain.<br /><br />
-								In 2017, crypto then shot to the moon with consumers all hopping on the Bitcoin train in the hopes of getting rich
-								quick. Bitcoin topped $20000, and crypto suddenly became a 750 Billion dollar market.<br /><br />
-								But as quick as it rose, crypto died down, the market corrected and Bitcoin dropped to $8000 per coin. Commisions
-								like the SEC started to become more involved and crypto has started to become more like a convential stock exchange.</p>
+					<h1>Coin Market</h1>
+					<p>There have been distinct eras withing the decade long history of
+						 cryptocurrency. The early hobby era from the launch of Bitcoin in 2009
+					 to the foundation of the two trading platforms: Mt. Gox and the Silk Road marketplace.
+				   The period of growth crashed horribly when both exchanges collapsed and Bitcoin dropped from $1000 to
+						just under $300.</p>
+					<p>Then, in 2014-2016, there was a diversification of crypto from only Bitcoin to Ethereum and other platforms
+						using crypto as a vehicle for providing decentralized services. The days of blockchain.</p>
+					<p>In 2017, crypto then shot to the moon with consumers all hopping on the Bitcoin train in the hopes of getting rich
+						quick. Bitcoin topped $20000, and crypto suddenly became a 750 Billion dollar market.</p>
+					<p>But as quick as it rose, crypto died down, the market corrected and Bitcoin dropped to $8000 per coin. Commisions
+					like the SEC started to become more involved and crypto has started to become more like a convential stock exchange.</p>
+					<div id="finance-dashboard">
+						<div class="row">
+							<div class="col-6">
+								<div id="finance-treemap"></div>
 							</div>
-							<div id="finance-dashboard">
-								<div class="row">
-									<div class="col-6">
-										<div id="finance-treemap"></div>
-									</div>
-									<div class="col-6">
-										<button type="button" id="finance-absolute-button">Absolute</button>
-										<button type="button" id="finance-percent-button">Percentage</button>
-										<div id="finance-volume-chart"></div>
-									</div>
-									<div class="col-12">
-										<div class="finance-events">
-											<p>Notable Events:</p>
-											<div class="number-circle" id="f-popup-1">1</div>
-											<div class="number-circle" id="f-popup-2">2</div>
-											<div class="number-circle" id="f-popup-3">3</div>
-											<div class="number-circle" id="f-popup-4">4</div>
-											<div class="number-circle" id="f-popup-5">5</div>
+							<div class="col-6">
+								<button type="button" id="finance-absolute-button">Absolute</button>
+								<button type="button" id="finance-percent-button">Percentage</button>
+								<div id="finance-volume-chart"></div>
+							</div>
+							<div class="col-12">
+								<div class="finance-events">
+									<p>Notable Events:</p>
+									<div class="number-circle" id="f-popup-1">1</div>
+									<div class="number-circle" id="f-popup-2">2</div>
+									<div class="number-circle" id="f-popup-3">3</div>
+									<div class="number-circle" id="f-popup-4">4</div>
+									<div class="number-circle" id="f-popup-5">5</div>
+								</div>
+								<button type="button" id="finance-historical-button">Historical View</button>
+								<button type="button" id="finance-detailed-button">Detailed View</button>
+								<div class="detailed-inputs-wrapper">
+									<div class="detailed-inputs">
+										<div class="detailed-arrows" id="detailed-month-prev">
+											<i class="fas fa-arrow-circle-left"></i>
 										</div>
-										<button type="button" id="finance-historical-button">Historical View</button>
-										<button type="button" id="finance-detailed-button">Detailed View</button>
-										<div class="detailed-inputs-wrapper">
-											<div class="detailed-inputs">
-												<div class="detailed-arrows" id="detailed-month-prev">
-													<i class="fas fa-arrow-circle-left"></i>
-												</div>
-												<div id="detailed-month"></div>
-												<div class="detailed-arrows" id="detailed-month-next">
-													<i class="fas fa-arrow-circle-right"></i>
-												</div>
-												<div id="detailed-info">
-													<i class="far fa-question-circle"></i>
-												</div>
-												<div id="detailed-info-popper">
-													<img src="img/candlestick.svg" class="candlestick-svg">
-												</div>
-											</div>
+										<div id="detailed-month"></div>
+										<div class="detailed-arrows" id="detailed-month-next">
+											<i class="fas fa-arrow-circle-right"></i>
 										</div>
-										<div id="finance-timeline"></div>
+										<div id="detailed-info">
+											<i class="far fa-question-circle"></i>
+										</div>
+										<div id="detailed-info-popper">
+											<img src="img/candlestick.svg" class="candlestick-svg">
+										</div>
 									</div>
 								</div>
+								<div id="finance-timeline"></div>
 							</div>
-							<div>
-								<p>So even with the stomach turning events following crypto, the amount of attention crypto
-									is beneficial in introducing the benefits of a decentralized and secure currency. The market
-									just needs to time to work out the kinks before crypto starts backing more mainstream economies.</p>
-							</div>
-							//https://medium.com/@kwerb/the-history-of-bitcoin-in-one-chart-and-it-says-nothing-about-prices-33575c337f37
 						</div>
 					</div>
+					<p>So even with the stomach turning events following crypto, the amount of attention crypto
+						is beneficial in introducing the benefits of a decentralized and secure currency. The market
+						just needs to time to work out the kinks before crypto starts backing more mainstream economies.</p>
+					//https://medium.com/@kwerb/the-history-of-bitcoin-in-one-chart-and-it-says-nothing-about-prices-33575c337f37
 				</div>
 				<div class="col-12">
 					<h1>Topic: Decentralization</h1>
@@ -226,6 +219,49 @@
 						[developments of the near future in regard to crypto]
 					</p>
 					<p>[Finish off with possible improvements to crypto and the sustainable future]</p>
+				</div>
+			</div>
+			<div class="row section">
+				<div class="col-12">
+					<h1>Our Team</h1>
+					<div class="team">
+						<div class="person-card">
+							<img src="img/eric.png" />
+							<p class="person-name">Eric Timmerman</p>
+							<p>Computer Science</p>
+							<p>Senior ('19), Currier</p>
+						</div>
+						<div class="person-card">
+							<img src="img/eric.png" />
+							<p class="person-name">Mauricio Ruiz</p>
+							<p>Computer Science</p>
+							<p>Senior ('19), Currier</p>
+						</div>
+						<div class="person-card">
+							<img src="img/eric.png" />
+							<p class="person-name">Neil Philip</p>
+							<p>Computer Science</p>
+							<p>Senior ('19), Currier</p>
+						</div>
+						<div class="person-card">
+							<img src="img/eric.png" />
+							<p class="person-name">Kenneth Kim</p>
+							<p>Electrical Engineering</p>
+							<p>Junior ('20), Quincy</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row section">
+				<div class="col-12">
+					<h1>Sources</h1>
+					<div class="sources">
+						<ul>
+							<li><a href="https://www.google.com" target="_blank">Some stuff</a></li>
+							<li><a href="https://www.google.com" target="_blank">Some more stuff</a></li>
+							<li><a href="https://www.google.com" target="_blank">Some more more stuff</a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>

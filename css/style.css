@@ -5,6 +5,7 @@ body, html {
     height: 100%;
     font-family: 'Lato', sans-serif;
 }
+
 body {
 	background-color: #262626;
 }
@@ -12,10 +13,25 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
     color: #eeb111;
+    text-align: center;
 }
 
 p {
 	color: whitesmoke;
+}
+
+a {
+    color: #f5cf70;
+    transition: 0.3s;
+}
+
+a:hover {
+    color: #eeb111;
+    text-decoration: none;
+}
+
+.section {
+    margin-top: 40px;
 }
 
 .container {
@@ -225,4 +241,59 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 .finance-event-popup .popup-date {
     margin: 0;
     padding: 5px 0 15px;
+}
+
+/* Team Section */
+.team {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.person-card {
+    background-color: #404040;
+    border-radius: 20px;
+    padding: 30px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.person-card:not(:first-child) {
+    margin-left: 25px;
+}
+
+.person-card:not(:last-child) {
+    margin-right: 25px;
+}
+
+.person-card p {
+    text-align: center;
+    margin: 0;
+}
+
+.person-card img {
+    width: 80%;
+    height: auto;
+    margin: auto;
+    margin-bottom: 10px;
+    border-radius: 50%;
+}
+
+.person-name {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Sources section */
+.sources {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+}
+
+.sources ul {
+    color: whitesmoke;
+    list-style: none;
 }
