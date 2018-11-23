@@ -80,11 +80,13 @@ function createVis(error, financialData) {
     // Cleaned in Excel.
     queue()
         .defer(d3.json,"data/world-110m.json")
+        .defer(d3.tsv, "data/world-110m-country-names.tsv")
         .defer(d3.csv, "data/attitude.csv")
         .defer(d3.csv, "data/legality.csv")
-        .await(function(error, mapTopJson, data1, data2) {
-            var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
-          //  var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
+        .await(function(error, mapTopJson, worldTsv, data1, data2) {
+            //var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
+           // var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
+            var globe = new dragGlobe("choropleth", mapTopJson, worldTsv);
         });
 
     /* Create visualization instances */
