@@ -4,20 +4,33 @@ var coinColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 /* Load data */
 queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
+    .defer(d3.json, "data/coinTree.json")
     .await(createVis);
 
-function createVis(error, financialData) {
+function createVis(error, financialData, coinTreeJSON) {
     if (error) { console.log(error); }
+
+    /* Create visualization instances */
+    // e.g. var exampleVis = new ExampleVis("example-vis", data, eventHandler);
 
     /*** Create dashboards ***/
 
     /** Dashboard 1 **/
 
-    /* Clean data */
-    // TODO
+    // Clean Data
+    var treeDateParse = d3.timeParse('%m-%Y')
 
-    /* Create visualization instances */
-    // e.g. var exampleVis = new ExampleVis("example-vis", data, eventHandler);
+    var coinTreeData = Object.keys(coinTreeJSON).map(function(key) {
+        return [treeDateParse(key), coinTreeJSON[key]];
+    });
+    coinTreeData.sort(function(a, b) {
+        return a[0] - b[0];
+    });
+
+    // console.log(coinTreeData)
+
+    // Create visualization instances
+    var familyTree = new FamilyTree("family-tree", coinTreeData)
 
     /* Bind event handlers */
 
