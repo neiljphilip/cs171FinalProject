@@ -67,15 +67,15 @@ FinanceTimeline.prototype.initVis = function() {
         .attr("x", -40)
         .attr("y", -8)
         .attr('class', 'axis-label')
-        .attr('id', 'chart-title');
+        .attr('id', 'finance-chart-title');
 
     vis.svg.append('g')
         .attr('class', 'axis-label')
         .append('text')
-        .attr('x', -1 * vis.height + 60)
+        .attr('x', -1 * vis.height + 80)
         .attr('y', -50)
         .attr('transform', 'rotate(-90)')
-        .text('Valuation (USD)');
+        .text('Price (USD)');
 
     vis.svg.append("text")
         .attr("x", -40)
@@ -105,6 +105,7 @@ FinanceTimeline.prototype.initVis = function() {
             vis.currentBrushRegion = d3.event.selection;
             vis.currentBrushRegion = vis.currentBrushRegion.map(vis.x.invert);
 
+            vis.updateSelectionText(vis.currentBrushRegion[0], vis.currentBrushRegion[1]);
             // 3. Trigger the event 'selectionChanged' of our event handler
             $(vis.eventHandler).trigger("selectionChanged", vis.currentBrushRegion);
         });
@@ -139,16 +140,24 @@ FinanceTimeline.prototype.wrangleData = function() {
 FinanceTimeline.prototype.updateVis = function() {
     var vis = this;
 
-    vis.x.domain(d3.extent(vis.displayData, function(d) { return d.Date; }));
     if (vis.chosenView === 'historical') {
+        // Historical shows full domain
+        vis.x.domain(d3.extent(vis.data, function(d) { return d.Date; }));
+
         vis.y.domain(d3.extent(vis.displayData, function(d) { return d.Open; }));
 
         // Call brush component here
         vis.brushGroup.call(vis.brush)
             .attr("clip-path", "url(#clip)");
 
+        if (vis.currentBrushRegion) {
+            vis.updateSelectionText(vis.currentBrushRegion[0], vis.currentBrushRegion[1]);
+        }
         $('.brush').show();
     } else {
+        // Details shows domain of the display data, which is filtered by the chosen dates
+        vis.x.domain(d3.extent(vis.displayData, function(d) { return d.Date; }));
+
         var minPrice = d3.min(vis.displayData, function(d) { return d.Low; });
         var maxPrice = d3.max(vis.displayData, function(d) { return d.High; });
         vis.y.domain([0.98 * minPrice, 1.02 * maxPrice]);
@@ -165,6 +174,9 @@ FinanceTimeline.prototype.updateVis = function() {
         .duration(800)
         .attr('d', vis.line)
         .attr('stroke', function(d) {
+            if (!d[0]) {
+                return;
+            }
             return coinColorScale(d[0].Coin);
         });
 
@@ -247,14 +259,6 @@ FinanceTimeline.prototype.updateVis = function() {
         vis.candleLines.exit()
             .remove();
     }
-
-    /* Draw vis using vis.displayData */
-
-    // Enter, update, exit
-
-    // Draw axes (if applicable)
-
-    // Draw legend (if applicable)
 };
 
 /*
@@ -277,11 +281,15 @@ FinanceTimeline.prototype.onViewChanged = function(view) {
 FinanceTimeline.prototype.updateCoin = function(coin) {
     var vis = this;
 
-    // Update vis.filteredData
     vis.chosenCoin = coin;
     vis.coinData = vis.data.filter(function(d) { return d.Coin === vis.chosenCoin; });
-    vis.svg.select('#chart-title')
+    vis.svg.select('#finance-chart-title')
         .text(coin);
+
+    // New coin might be able to go farther back or forward in time
+    if (vis.chosenView === 'detailed') {
+        vis.updateDetailInputs(vis.selectionStart, vis.selectionEnd);
+    }
 };
 
 FinanceTimeline.prototype.updateView = function(view) {
@@ -291,10 +299,12 @@ FinanceTimeline.prototype.updateView = function(view) {
     vis.chosenView = view;
     // Historical defaults to entire view of coin
     if (view === "historical") {
-        $('.detailed-inputs').hide();
+        $('.detailed-arrows').hide();
+        $('#detailed-info').hide();
         vis.initHistorical();
     } else { // Detailed view defaults to current month
-        $('.detailed-inputs').show();
+        $('.detailed-arrows').show();
+        $('#detailed-info').show();
         vis.initDetailed();
     }
 };
@@ -303,10 +313,12 @@ FinanceTimeline.prototype.updateView = function(view) {
 FinanceTimeline.prototype.initHistorical = function(selectionStart, selectionEnd) {
     var vis = this;
 
-    var dataRange = d3.extent(vis.coinData, function(d) { return d.Date; });
+    // Always init historical as entire range
+    var dataRange = d3.extent(vis.data, function(d) { return d.Date; });
     vis.selectionStart = dataRange[0];
     vis.selectionEnd = dataRange[1];
 
+    vis.updateSelectionText(vis.selectionStart, vis.selectionEnd);
     $(vis.eventHandler).trigger("selectionChanged", [vis.selectionStart, vis.selectionEnd]);
 };
 
@@ -326,15 +338,19 @@ FinanceTimeline.prototype.initDetailed = function() {
     vis.updateDetailInputs(vis.selectionStart, vis.selectionEnd);
 };
 
+FinanceTimeline.prototype.updateSelectionText = function(start, end) {
+    var dateFormatter = d3.timeFormat(" %d, %Y");
+    var firstDate = monthNames[start.getMonth()] + dateFormatter(start);
+    var secondDate = monthNames[end.getMonth()] + dateFormatter(end);
+    $('#detailed-month').text(firstDate + ' - ' + secondDate);
+};
+
 FinanceTimeline.prototype.updateDetailInputs = function(start, end) {
     var vis = this;
 
     $(vis.eventHandler).trigger("selectionChanged", [start, end]);
 
-    var dateFormatter = d3.timeFormat("%Y");
-    var firstDate = monthNames[start.getMonth()] + ", " + dateFormatter(start);
-    var secondDate = monthNames[end.getMonth()] + ", " + dateFormatter(end);
-    $('#detailed-month').text(firstDate + ' - ' + secondDate);
+    vis.updateSelectionText(start, end);
 
     var isMoreForward = d3.max(vis.coinData, function(d) { return d.Date; }) > end;
     var isMoreBackward = d3.min(vis.coinData, function(d) { return d.Date; }) < start;
@@ -357,9 +373,31 @@ FinanceTimeline.prototype.updateDetailed = function(moveForward) {
 
     // Move forward or backward 4 months
     var monthsToMove = moveForward ? 4 : -4;
+    var monthDiff = vis.selectionEnd.getMonth() - vis.selectionStart.getMonth()
+        + (12 * (vis.selectionEnd.getFullYear() - vis.selectionStart.getFullYear()));
 
-    vis.selectionStart = vis.selectionStart.add(monthsToMove).month();
-    vis.selectionEnd = vis.selectionEnd.add(monthsToMove).month();
+    // True if a key event was chosen
+    if (monthDiff < Math.abs(monthsToMove - 1)) {
+        vis.selectionEnd = new Date(vis.selectionStart);
+
+        vis.selectionStart = vis.selectionStart.addMonths(monthsToMove);
+        if (moveForward) {
+            vis.selectionEnd = vis.selectionEnd.addMonths(monthsToMove * 2);
+        }
+    } else {
+        vis.selectionStart = vis.selectionStart.addMonths(monthsToMove);
+        vis.selectionEnd = vis.selectionEnd.addMonths(monthsToMove);
+    }
+
+    vis.updateDetailInputs(vis.selectionStart, vis.selectionEnd);
+    vis.onUpdateFilters();
+};
+
+FinanceTimeline.prototype.updateDetailedWithDates = function(start, end) {
+    var vis = this;
+
+    vis.selectionStart = start;
+    vis.selectionEnd = end;
 
     vis.updateDetailInputs(vis.selectionStart, vis.selectionEnd);
     vis.onUpdateFilters();

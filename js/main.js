@@ -4,15 +4,17 @@ var coinColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 /* Load data */
 queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
+    .defer(d3.csv, "data/crime.csv")
     .defer(d3.json, "data/coinTree.json")
     .await(createVis);
 
-function createVis(error, financialData, coinTreeJSON) {
+function createVis(error, financialData, crimeData, coinTreeJSON) {
     if (error) { console.log(error); }
-
-    /* Create visualization instances */
-    // e.g. var exampleVis = new ExampleVis("example-vis", data, eventHandler);
-
+    //https://howmuch.net/articles/biggest-crypto-hacks-scams
+    for (var i in crimeData){
+      crimeData[i].loss = +crimeData[i].loss;
+    }
+    console.log(crimeData);
     /*** Create dashboards ***/
 
     /** Dashboard 1 **/
@@ -26,8 +28,6 @@ function createVis(error, financialData, coinTreeJSON) {
     coinTreeData.sort(function(a, b) {
         return a[0] - b[0];
     });
-
-    // console.log(coinTreeData)
 
     // Create visualization instances
     var familyTree = new FamilyTree("family-tree", coinTreeData)
@@ -83,7 +83,7 @@ function createVis(error, financialData, coinTreeJSON) {
 
     allCoins = Array.from([... new Set(cryptoFinanceData.map(function(d) { return d.Coin; }))]);
     coinColorScale.domain(allCoins);
-    console.log(cryptoFinanceData);
+    // console.log(cryptoFinanceData);
     // console.log(volumeByData);
 
     /* Create visualization instances */
@@ -129,6 +129,38 @@ function createVis(error, financialData, coinTreeJSON) {
         financeTimeline.onCoinChanged(coin);
     });
 
+    // Set up tooltips for finance notable events
+    $('.number-circle').each(function(i, el) {
+        var eventId = $(el).text();
+        var event = financeEvents[eventId];
+
+        var popupID = "finance-event-popup-" + eventId;
+        var popup = "<div class='finance-event-popup' id='" + popupID + "'>" +
+            "<p class='popup-title'>" + event.title + "</p>" +
+            "<em><p class='popup-date'>" + event.keyDate + "</p></em>" +
+            "<p>" + event.content + "</p>" +
+            "</div>";
+        $('.finance-events').append(popup);
+
+        tippy(document.querySelector("#f-popup-" + eventId), {
+            content: document.querySelector('#' + popupID),
+            hideOnClick: false
+        });
+    });
+
+    $('.number-circle').on('click', function() {
+        var eventId = $(this).text();
+        // financeEvents is in helpers.js
+        var event = financeEvents[eventId];
+        var dateParser = d3.timeParse("%m %d, %Y");
+
+        financeTimeline.updateCoin(event.coin);
+        financeTimeline.updateView("detailed");
+        financeTimeline.updateDetailedWithDates(dateParser(event.dates[0]), dateParser(event.dates[1]));
+
+        financeVolumeChart.onUpdateView(event.volumeType);
+    });
+
     /** Dashboard 3 **/
 
     /* Clean data */
@@ -146,4 +178,7 @@ function createVis(error, financialData, coinTreeJSON) {
 
 
     /* Bind event handlers */
+
+    //Extra vizualiazations
+    var cChart = new BarChart("crimeChart", crimeData);
 }
