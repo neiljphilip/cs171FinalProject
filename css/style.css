@@ -199,6 +199,11 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     opacity: 0.9;
 }
 
+.node-text {
+    font-size: 10px;
+    fill: white;
+}
+
 .number-circle {
     transition: 0.3s;
 }

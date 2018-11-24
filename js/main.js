@@ -5,9 +5,10 @@ var coinColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
     .defer(d3.csv, "data/crime.csv")
+    .defer(d3.json, "data/coinTree.json")
     .await(createVis);
 
-function createVis(error, financialData, crimeData) {
+function createVis(error, financialData, crimeData, coinTreeJSON) {
     if (error) { console.log(error); }
     //https://howmuch.net/articles/biggest-crypto-hacks-scams
     for (var i in crimeData){
@@ -18,11 +19,18 @@ function createVis(error, financialData, crimeData) {
 
     /** Dashboard 1 **/
 
-    /* Clean data */
-    // TODO
+    // Clean Data
+    var treeDateParse = d3.timeParse('%m-%Y')
 
-    /* Create visualization instances */
-    // e.g. var exampleVis = new ExampleVis("example-vis", data, eventHandler);
+    var coinTreeData = Object.keys(coinTreeJSON).map(function(key) {
+        return [treeDateParse(key), coinTreeJSON[key]];
+    });
+    coinTreeData.sort(function(a, b) {
+        return a[0] - b[0];
+    });
+
+    // Create visualization instances
+    var familyTree = new FamilyTree("family-tree", coinTreeData)
 
     /* Bind event handlers */
 
