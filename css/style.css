@@ -204,6 +204,11 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     fill: white;
 }
 
+#family-tree {
+    height: 30vw;
+    overflow-y: auto;
+}
+
 .number-circle {
     transition: 0.3s;
 }

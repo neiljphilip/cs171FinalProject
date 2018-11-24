@@ -26,7 +26,7 @@ FamilyTree.prototype.initVis = function() {
         vis.height = 500 - vis.margin.top - vis.margin.bottom;
 
     vis.svg = d3.select("#" + vis.parentElement).append('svg')
-        .attr("width", vis.width + vis.margin.left + vis.margin.right)
+        .attr("width", vis.width)
         .attr('class', 'tree-SVG')
         .append('g')
         .attr('class', 'tree-g')
@@ -74,7 +74,7 @@ FamilyTree.prototype.initVis = function() {
                 .attr("transform", `translate(${vis.root.dy / 3},${vis.root.dx - x0})`);
 
             vis.wrangleData();
-        }, i*2000);
+        }, i*500);
     }
 };
 
@@ -84,8 +84,6 @@ FamilyTree.prototype.initVis = function() {
 
 FamilyTree.prototype.wrangleData = function() {
     var vis = this;
-
-
 
     // Perform any data manipulation if necessary on the filtered data
     vis.displayData = vis.root;
@@ -107,11 +105,13 @@ FamilyTree.prototype.updateVis = function() {
     // Draw links
     let links = d3.select('.links-g')
         .selectAll(".tree-link")
-        .data(vis.displayData.links());
+        .data(vis.displayData.links(), function(d) {return d;});
 
     links.enter().append("path")
         .attr('class', 'tree-link')
         .merge(links)
+        // .transition()
+        // .duration(500)
         .attr("d", d => `
         M${d.target.y},${d.target.x}
         C${d.source.y + vis.displayData.dy / 2},${d.target.x}
@@ -126,9 +126,13 @@ FamilyTree.prototype.updateVis = function() {
     circles.enter().append('circle')
         .attr('class', 'node-circle')
         .merge(circles)
+        // .transition()
+        // .duration(500)
         .attr("transform", d => `translate(${d.y},${d.x})`)
-        .attr("fill", d => d.children ? "#555" : "#999")
-        .attr("r", 2.5);
+        .attr("fill", function(d) {
+            return d.data.status === "running" ? 'white' : '#ffb3ba'
+        })
+        .attr("r", 3);
 
     // Draw labels
     let labels = vis.svg.selectAll('.node-text')
