@@ -54,8 +54,7 @@ dragGlobe.prototype.initVis = function() {
         .attr("d", vis.path);
 
     // adds tooltip
-    vis.countryTooltip = d3.select("body").append("div").attr("class", "countryTooltip"),
-        vis.countryList = d3.select("body").append("select").attr("name", "countries");
+    vis.countryTooltip = d3.select("body").append("div").attr("class", "countryTooltip");
 
     vis.countryById = {},
         vis.countries = topojson.feature(vis.world, vis.world.objects.countries).features;
@@ -64,9 +63,6 @@ dragGlobe.prototype.initVis = function() {
 
     vis.countryName.forEach(function(d) {
         vis.countryById[d.id] = d.name;
-        option = vis.countryList.append("option");
-        option.text(d.name);
-        option.property("value", d.id);
     });
 
     //Drawing countries on the globe
