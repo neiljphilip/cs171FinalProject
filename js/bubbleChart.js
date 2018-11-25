@@ -7,7 +7,7 @@ function bubbleChart() {
 	columnForColors = "coin",
 	columnForTitle = "title",
 	columnForRadius = "txs",
-	forceApart = -300,
+	forceApart = -550,
 	unitName="txs",
 	customColors=false,
 	customRange,
@@ -58,7 +58,7 @@ function bubbleChart() {
 
 		var colorCircles;
 		if (!customColors) {
-			colorCircles = d3.scaleOrdinal(d3.schemeCategory10);
+			colorCircles = d3.scaleOrdinal(["gray", "rgb(255, 187, 120)", "rgb(148, 103, 189)", "rgb(44, 160, 44)", "rgb(255, 127, 14)", "rgb(197, 176, 213)", "rgb(174, 199, 232)", "rgb(31, 119, 180)"]);
 		}
 		else {
 			colorCircles = d3.scaleOrdinal()
@@ -83,9 +83,14 @@ function bubbleChart() {
 		.attr('transform', 'translate(' + [width / 2, height / 2] + ')')
 		.style('opacity',1);
 
+
+
 		node.append("circle")
 		.attr("id",function(d,i) {
 			return i;
+		})
+		.attr("class", function(d){
+				return "bubble";
 		})
 		.attr('r', function(d) {
 			return scaleRadius(d[columnForRadius]);
@@ -102,6 +107,10 @@ function bubbleChart() {
 		})
 		.on("mouseout", function() {
 			return tooltip.style("visibility", "hidden");
+		})
+		.append("svg:title")
+		.text(function(d){
+			return d[columnForRadius]+"\n"+"Transactions Per Second";
 		});
 		node.append("clipPath")
 		.attr("id",function(d,i) {
@@ -122,7 +131,7 @@ function bubbleChart() {
 				return ".3em";//scaleRadius(d[columnForRadius])/4;
 			})
 			.text(function(d) {
-				return d[columnForTitle]+"\n- "+d[columnForRadius];
+				return d[columnForTitle];
 			})
 			.on("mouseover", function(d) {
 				tooltip.html(d[columnForTitle] + "<br/>" + d[columnForColors] + "<br/>" + d[columnForRadius] + " "+ unitName);
@@ -133,8 +142,13 @@ function bubbleChart() {
 			})
 			.on("mouseout", function() {
 				return tooltip.style("visibility", "hidden");
+			})
+			.append("svg:title")
+			.text(function(d){
+				return d[columnForRadius]+"\n"+"Transactions Per Second";
 			});
 		}
+
 
 		svg.append('text')
 			.attr('x',width/2).attr('y',marginTop)

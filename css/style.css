@@ -38,11 +38,15 @@ a:hover {
     padding: 2% 0;
 }
 .bar {
-  fill: #ffb3ba;
+  fill: rgb(255, 187, 120);
 }
 .kennyText {
   fill: whitesmoke;
 }
+.kennyText:hover, .bubble:hover {
+  cursor: pointer;
+}
+
 #txChart {
   display: flex;
   justify-content: center;
