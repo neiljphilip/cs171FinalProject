@@ -43,7 +43,10 @@ a:hover {
 .kennyText {
   fill: whitesmoke;
 }
-
+#txChart {
+  display: flex;
+  justify-content: center;
+}
 /* TEXT - HEADERS, PARAGRAPHS */
 
 /* COMPONENTS - BUTTONS, FORMS, INPUTS */

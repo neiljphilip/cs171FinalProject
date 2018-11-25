@@ -6,15 +6,23 @@ queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
     .defer(d3.csv, "data/crime.csv")
     .defer(d3.json, "data/coinTree.json")
+    .defer(d3.csv, "data/txSpeed.csv")
     .await(createVis);
 
-function createVis(error, financialData, crimeData, coinTreeJSON) {
+function createVis(error, financialData, crimeData, coinTreeJSON, txData) {
     if (error) { console.log(error); }
     //https://howmuch.net/articles/biggest-crypto-hacks-scams
     for (var i in crimeData){
       crimeData[i].loss = +crimeData[i].loss;
     }
     console.log(crimeData);
+    for(var i in txData){
+      txData[i].txs = +txData[i].txs;
+    }
+    console.log(txData);
+    //transactions speed data
+    var chart = bubbleChart().width(600).height(400).showTitleOnCircle(true);
+    d3.select("#txChart").datum(txData).call(chart);
     /*** Create dashboards ***/
 
     /** Dashboard 1 **/
