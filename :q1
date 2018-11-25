@@ -1,0 +1,50 @@
+[33mcommit 4a53be933bc526ee4496838390613d2b44c771e5[m
+Author: neiljphilip <nphilip33@yahoo.com>
+Date:   Sun Nov 18 22:09:51 2018 -0500
+
+    prototype v1 dash3
+
+[33mcommit 156fce72ed48934de854e514b975684e30ec820c[m
+Author: neiljphilip <nphilip33@yahoo.com>
+Date:   Fri Nov 16 14:49:59 2018 -0500
+
+    orig choro version
+
+[33mcommit ae7da611aa17f8e02e73521a42c9ab1a87b2a720[m
+Author: neiljphilip <nphilip33@yahoo.com>
+Date:   Fri Nov 16 03:01:59 2018 -0500
+
+    yeet
+
+[33mcommit 194ea2b6a33b7488ff2ab80e0f906d07cd5e41f2[m
+Author: neiljphilip <nphilip33@yahoo.com>
+Date:   Fri Nov 16 01:49:31 2018 -0500
+
+    comitting choropleth js file
+
+[33mcommit 85fe2d01dcebb18d06962cd2a8a03a3c3e09393c[m
+Merge: d4d23ff b403bd1
+Author: Stradivarius64 <mauricioruiz@college.harvard.edu>
+Date:   Sun Nov 18 21:06:10 2018 -0600
+
+    Merge pull request #1 from estimmerman/mauricio_branch
+    
+    Mauricio branch
+
+[33mcommit d4d23ff8717c6b755ae38011b460f128cc4b68fb[m
+Author: KennethDKim <31519000+KennethDKim@users.noreply.github.com>
+Date:   Sun Nov 18 18:02:53 2018 -0600
+
+    Story update
+
+[33mcommit 4802c46c408d52874f212840fb208c9a1355f971[m
+Author: Eric Timmerman <estimmerman@gmail.com>
+Date:   Sun Nov 18 17:42:09 2018 -0500
+
+    move finance dashboard to right place
+
+[33mcommit eac18434228cb0c00d2976ccddd334e6fbfebcdb[m
+Author: Eric Timmerman <estimmerman@gmail.com>
+Date:   Sun Nov 18 17:36:07 2018 -0500
+
+    make the finance dashboard baller

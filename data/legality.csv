@@ -1,4 +1,4 @@
-Country or territory,Legal
+Country,Legal
 Algeria,Illegal
 Egypt,Illegal
 Morocco,Illegal
@@ -35,7 +35,7 @@ Bangladesh,Illegal
 India,Legal
 Nepal,Illegal
 Pakistan,Illegal
-China (PRC),Illegal
+China,Illegal
 Hong Kong,Legal
 Japan,Legal
 South Korea,Legal
