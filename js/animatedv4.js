@@ -246,8 +246,11 @@ dragGlobe.prototype.initVis = function() {
 // Initialize the data
         console.log(vis.volume);
         var cryptoCurr = getCountry(countryN);
-        var cryptoPercent = cryptoCurr.Raw;
-        if (cryptoCurr !== undefined) $("#worldShare").html("Share of World Bitcoin Transaction Volume");
+        var cryptoPercent;
+        if (cryptoCurr !== undefined) {
+            cryptoPercent = cryptoCurr.Raw;
+            $("#worldShare").html("Share of World Bitcoin Transaction Volume");
+        }
         var data = [cryptoPercent, 1 - cryptoPercent];
 
 // Define a default pie layout
