@@ -4,9 +4,14 @@ var dateParser = d3.timeParse("%b %d, %Y");
 /* Load data */
 queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
+    .defer(d3.json,"data/world-110m.json")
+    .defer(d3.tsv, "data/world-110m-country-names.tsv")
+    .defer(d3.csv, "data/attitude.csv")
+    .defer(d3.csv, "data/legality.csv")
+    .defer(d3.csv, "data/cryptoPercent.csv")
     .await(createVis);
 
-function createVis(error, financialData) {
+function createVis(error, financialData, mapTopJson, worldTsv, data1, data2, data3) {
     if (error) { console.log(error); }
 
     /*** Create dashboards ***/
@@ -75,21 +80,22 @@ function createVis(error, financialData) {
     /* Bind event handlers */
 
     /** Dashboard 3 **/
+    var globe = new dragGlobe("choropleth", mapTopJson, worldTsv, data1, data2, data3);
 
     /* Clean data */
     // Cleaned in Excel.
-    queue()
+  /*  queue()
         .defer(d3.json,"data/world-110m.json")
         .defer(d3.tsv, "data/world-110m-country-names.tsv")
         .defer(d3.csv, "data/attitude.csv")
         .defer(d3.csv, "data/legality.csv")
-        .await(function(error, mapTopJson, worldTsv, data1, data2) {
+        .defer(d3.csv, "data/cryptoPercent.csv")
+        .await(function(error, mapTopJson, worldTsv, data1, data2, data3) {
             //var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
            // var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
-            console.log(data1);
-            var globe = new dragGlobe("choropleth", mapTopJson, worldTsv, data1, data2);
+            var globe = new dragGlobe("choropleth", mapTopJson, worldTsv, data1, data2, data3);
         });
-
+*/
     /* Create visualization instances */
 
 
