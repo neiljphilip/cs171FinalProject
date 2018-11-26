@@ -4,6 +4,7 @@ body, html {
     width: 100%;
     height: 100%;
     font-family: 'Lato', sans-serif;
+    font-size: 14px;
 }
 
 body {
@@ -14,10 +15,13 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
     color: #eeb111;
     text-align: center;
+    padding: 10px 0;
 }
 
 p {
 	color: whitesmoke;
+    padding: 5px 0;
+    margin-bottom: 0;
 }
 
 a {
@@ -30,12 +34,21 @@ a:hover {
     text-decoration: none;
 }
 
+/* Silver color */
+.gray {
+    color: #969893;
+}
+
+.text-header {
+    font-size: 20px;
+}
+
 .section {
     margin-top: 40px;
 }
 
 .container {
-    padding: 2% 0;
+    padding: 0 0 2%;
 }
 .bar {
   fill: rgb(255, 187, 120);
@@ -74,6 +87,15 @@ a:hover {
 .caption-label {
     font-size: 10px;
     fill: lightgray;
+    color: lightgray;
+}
+
+.caption-label-lg {
+    font-size: 14px;
+}
+
+.margin-10 {
+    margin: 10px 0;
 }
 
 button {
@@ -229,6 +251,10 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     outline: none;
 }
 
+#finance-dashboard {
+    margin-top: 30px;
+}
+
 .finance-events p {
     display: inline-block;
     margin-right: 10px;
@@ -313,4 +339,11 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 .sources ul {
     color: whitesmoke;
     list-style: none;
+}
+
+/* Miscellaneous */
+#project-title {
+    font-size: 50px;
+    color: #f2bf40;
+    margin-top: 30px;
 }
