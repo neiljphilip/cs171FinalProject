@@ -52,6 +52,7 @@ FamilyTree.prototype.initVis = function() {
     function setDelay(i) {
         setTimeout(function() {
             // Scales, axes, and domains
+            vis.date = vis.data[i][0];
             vis.root = d3.hierarchy(vis.data[i][1])
                 .sort((a, b) => (a.height - b.height) || a.data.coin.localeCompare(b.data.name));
 
@@ -101,6 +102,9 @@ FamilyTree.prototype.updateVis = function() {
     var vis = this;
 
     /* Draw vis using vis.displayData */
+
+    var treeDate = d3.timeFormat('%B %Y')(vis.date);
+    d3.select('#tree-date-label').node().innerHTML = `${treeDate}`;
 
     // Draw links
     let links = d3.select('.links-g')
