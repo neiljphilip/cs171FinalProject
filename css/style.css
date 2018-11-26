@@ -31,18 +31,18 @@ a:hover {
     color: #eeb111;
     text-decoration: none;
 }
-.kClass{
+
+.img-content{
   display: flex;
   justify-content: center;
   height: 100%;
   align-items: center;
 }
-.kClass5{
-  display: flex;
-  justify-content: center;
-  height: 50%;
-  align-items: center;
+
+.img-content img {
+    width: 70%;
 }
+
 .section {
     margin-top: 40px;
 }
