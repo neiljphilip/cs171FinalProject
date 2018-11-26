@@ -51,7 +51,17 @@ dragGlobe.prototype.initVis = function() {
     vis.svg.append("path")
         .datum({type: "Sphere"})
         .attr("class", "water")
-        .attr("d", vis.path);
+        .attr("d", vis.path)
+        .call(d3.drag()
+            .subject(function() { var r = vis.projection.rotate(); return {x: r[0] / vis.sens, y: -r[1] / vis.sens}; })
+            .on("drag", function() {
+                vis.timer.stop();
+                vis.rotate = vis.projection.rotate();
+                vis.projection.rotate([d3.event.x * vis.sens, -d3.event.y * vis.sens, vis.rotate[2]]);
+                vis.svg.selectAll("path.land").attr("d", vis.path);
+                vis.svg.selectAll(".focused").classed("focused", vis.focused = false);
+                //   spinning_globe();
+            }));
 
     // adds tooltip
     vis.countryTooltip = d3.select("body").append("div").attr("class", "countryTooltip");

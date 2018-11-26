@@ -332,3 +332,7 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     color: whitesmoke;
     list-style: none;
 }
+
+#pie {
+    text-align: center;
+}
