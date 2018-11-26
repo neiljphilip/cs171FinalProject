@@ -72,6 +72,10 @@ a:hover {
   cursor: pointer;
 }
 
+.bubble {
+    stroke-width: 5px;
+}
+
 #txChart,#crimeChart {
   display: flex;
   justify-content: center;
