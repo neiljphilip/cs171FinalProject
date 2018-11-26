@@ -355,7 +355,7 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 
 /* Miscellaneous */
 #project-title {
-    font-size: 50px;
+    font-size: 40px;
     color: #f2bf40;
     margin-top: 30px;
 }
@@ -393,5 +393,3 @@ select {
     font-size: 14px;
     font-family: sans-serif;
 }
-
->>>>>>> 347c2447bb58c1e925b0a4d1d45f1013770cafb2
