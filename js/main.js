@@ -5,7 +5,8 @@ var coinColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
     .defer(d3.csv, "data/crime.csv")
-    .defer(d3.json, "data/coinTree.json")
+    .defer(d3.json, "data/coinTreeAll.json")
+    .defer(d3.json, "data/coinTreeFiltered.json")
     .defer(d3.csv, "data/txSpeed.csv")
     .defer(d3.json,"data/world-110m.json")
     .defer(d3.tsv, "data/world-110m-country-names.tsv")
@@ -14,7 +15,7 @@ queue()
     .defer(d3.csv, "data/cryptoPercent.csv")
     .await(createVis);
 
-function createVis(error, financialData, crimeData, coinTreeJSON, txData,  mapTopJson, worldTsv, data1, data2, data3) {
+function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilteredJSON, txData,  mapTopJson, worldTsv, data1, data2, data3) {
     if (error) { console.log(error); }
     //https://howmuch.net/articles/biggest-crypto-hacks-scams
     for (var i in crimeData){
@@ -33,17 +34,24 @@ function createVis(error, financialData, crimeData, coinTreeJSON, txData,  mapTo
     /** Dashboard 1 **/
 
     // Clean Data
-    var treeDateParse = d3.timeParse('%m-%Y')
+    var treeDateParse = d3.timeParse('%m-%Y');
+
+    var coinTreeFilteredData = Object.keys(coinTreeFilteredJSON).map(function(key) {
+        return [treeDateParse(key), coinTreeFilteredJSON[key]];
+    });
+
+    coinTreeFilteredData.sort(function(a, b) {
+        return a[0] - b[0];
+    });
 
     var coinTreeData = Object.keys(coinTreeJSON).map(function(key) {
         return [treeDateParse(key), coinTreeJSON[key]];
     });
-    coinTreeData.sort(function(a, b) {
-        return a[0] - b[0];
-    });
 
     // Create visualization instances
-    var familyTree = new FamilyTree("family-tree", coinTreeData)
+    var familyTree = new FamilyTree("family-tree", coinTreeFilteredData);
+    var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
+
 
     /* Bind event handlers */
 

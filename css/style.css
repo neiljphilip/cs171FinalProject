@@ -216,6 +216,12 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     overflow-y: auto;
 }
 
+.tree-line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
 .number-circle {
     transition: 0.3s;
 }
