@@ -362,12 +362,17 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 .sources {
     display: flex;
     justify-content: center;
-    width: 50%;
 }
 
 .sources ul {
     color: whitesmoke;
     list-style: none;
+    text-align: center;
+    padding: 0;
+}
+
+.sources ul li {
+    padding: 2px 0;
 }
 
 /* Miscellaneous */
