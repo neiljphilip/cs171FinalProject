@@ -5,11 +5,17 @@ var coinColorScale = d3.scaleOrdinal(d3.schemeCategory20);
 queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
     .defer(d3.csv, "data/crime.csv")
-    .defer(d3.json, "data/coinTree.json")
+    .defer(d3.json, "data/coinTreeAll.json")
+    .defer(d3.json, "data/coinTreeFiltered.json")
     .defer(d3.csv, "data/txSpeed.csv")
+    .defer(d3.json,"data/world-110m.json")
+    .defer(d3.tsv, "data/world-110m-country-names.tsv")
+    .defer(d3.csv, "data/attitude.csv")
+    .defer(d3.csv, "data/legality.csv")
+    .defer(d3.csv, "data/cryptoPercent.csv")
     .await(createVis);
 
-function createVis(error, financialData, crimeData, coinTreeJSON, txData) {
+function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilteredJSON, txData,  mapTopJson, worldTsv, data1, data2, data3) {
     if (error) { console.log(error); }
     //https://howmuch.net/articles/biggest-crypto-hacks-scams
     for (var i in crimeData){
@@ -28,17 +34,24 @@ function createVis(error, financialData, crimeData, coinTreeJSON, txData) {
     /** Dashboard 1 **/
 
     // Clean Data
-    var treeDateParse = d3.timeParse('%m-%Y')
+    var treeDateParse = d3.timeParse('%m-%Y');
+
+    var coinTreeFilteredData = Object.keys(coinTreeFilteredJSON).map(function(key) {
+        return [treeDateParse(key), coinTreeFilteredJSON[key]];
+    });
+
+    coinTreeFilteredData.sort(function(a, b) {
+        return a[0] - b[0];
+    });
 
     var coinTreeData = Object.keys(coinTreeJSON).map(function(key) {
         return [treeDateParse(key), coinTreeJSON[key]];
     });
-    coinTreeData.sort(function(a, b) {
-        return a[0] - b[0];
-    });
 
     // Create visualization instances
-    var familyTree = new FamilyTree("family-tree", coinTreeData)
+    var familyTree = new FamilyTree("family-tree", coinTreeData);
+    var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
+
 
     /* Bind event handlers */
 
@@ -170,19 +183,25 @@ function createVis(error, financialData, crimeData, coinTreeJSON, txData) {
     });
 
     /** Dashboard 3 **/
+    var globe = new dragGlobe("choropleth", mapTopJson, worldTsv, data1, data2, data3);
 
     /* Clean data */
     // Cleaned in Excel.
-    queue()
+
+  /*  queue()
         .defer(d3.json,"data/world-110m.json")
+        .defer(d3.tsv, "data/world-110m-country-names.tsv")
         .defer(d3.csv, "data/attitude.csv")
         .defer(d3.csv, "data/legality.csv")
-        .await(function(error, mapTopJson, data1, data2) {
-            var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
-          //  var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
+        .defer(d3.csv, "data/cryptoPercent.csv")
+        .await(function(error, mapTopJson, worldTsv, data1, data2, data3) {
+            //var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
+           // var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
+            var globe = new dragGlobe("choropleth", mapTopJson, worldTsv, data1, data2, data3);
         });
-
+*/
     /* Create visualization instances */
+
 
 
     /* Bind event handlers */
