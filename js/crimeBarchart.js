@@ -28,7 +28,7 @@ BarChart.prototype.initVis = function(){
 
 
 	// * TO-DO *
-	vis.margin = {top: 20, right: 70, bottom: 30, left: 100};
+	vis.margin = {top: 20, right: 70, bottom: 30, left: 50};
 
 	vis.width = $("#crimeChart").width() - vis.margin.left - vis.margin.right - 60,
     vis.height = 300 - vis.margin.top - vis.margin.bottom;
@@ -52,7 +52,8 @@ BarChart.prototype.initVis = function(){
 
 	// axes
 	vis.xAxis = d3.axisBottom()
-	  .scale(vis.x);
+	  .scale(vis.x)
+    .ticks(5);
 	vis.yAxis = d3.axisLeft()
 	  .scale(vis.y);
 
