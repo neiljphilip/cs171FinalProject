@@ -30,7 +30,7 @@ BarChart.prototype.initVis = function(){
 	// * TO-DO *
 	vis.margin = {top: 20, right: 70, bottom: 30, left: 100};
 
-	vis.width = $(".row").width() - vis.margin.left - vis.margin.right - 60,
+	vis.width = $("#crimeChart").width() - vis.margin.left - vis.margin.right - 60,
     vis.height = 300 - vis.margin.top - vis.margin.bottom;
 
 

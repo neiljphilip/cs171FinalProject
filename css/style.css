@@ -89,6 +89,10 @@ a:hover {
     fill: lightgray;
 }
 
+.margin-20 {
+    margin: 20px 0;
+}
+
 button {
     background-color: #8c8c8c;
     border: none;
@@ -288,6 +292,7 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     flex-direction: column;
     justify-content: center;
     align-content: center;
+    flex: 1;
 }
 
 .person-card:not(:first-child) {
