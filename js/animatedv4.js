@@ -279,16 +279,16 @@ vis.svg.append("text")
 
        if (attitudeVal == "permissive") {
               attStatement += "Permissive";
-           updateText("att", attStatement + " to crypto.");
-           d3.select("#att").style("color", "green");
+           updateText("att", "Public is " + attStatement + " of crypto.");
+           d3.select("#att").style("color", "#6ed4f0");
            } else if (attitudeVal == "contentious") {
               attStatement += "Contentious";
-           updateText("att", attStatement + " to crypto.");
+           updateText("att", "Public is " + attStatement + " on crypto.");
            d3.select("#att").style("color", "yellow");
            } else if (attitudeVal == "hostile") {
            attStatement += "Hostile";
-           updateText("att", "Government is " + attStatement + " to crypto.");
-           d3.select("#att").style("color", "red");
+           updateText("att", "Public is " + attStatement + " to crypto.");
+           d3.select("#att").style("color", "#ff6200");
        }
 
 
