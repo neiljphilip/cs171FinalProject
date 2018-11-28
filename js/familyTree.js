@@ -7,7 +7,7 @@
 FamilyTree = function(_parentElement, _data, _eventHandler) {
     this.parentElement = _parentElement;
     this.data = _data;
-    this.eventHandler = _eventHandler;
+    this.lineChart = _eventHandler;
     this.filteredData = this.data;
 
     this.initVis();
@@ -40,11 +40,15 @@ FamilyTree.prototype.initVis = function() {
         .attr("stroke-opacity", 0.4)
         .attr("stroke-width", 1.5);
 
-    // nodes group
     vis.svg.append('g')
-        .attr('class', 'nodes-g')
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-width", 3);
+        .attr('class', 'nodes-g');
+
+    // labels group
+    vis.svg.append('g')
+        .attr('class', 'labels-g');
+
+
+
 
     for (var i = 0; i < vis.data.length; i++) {
         setDelay(i);
@@ -52,6 +56,7 @@ FamilyTree.prototype.initVis = function() {
     function setDelay(i) {
         setTimeout(function() {
             // Scales, axes, and domains
+            vis.i = i;
             vis.date = vis.data[i][0];
             vis.root = d3.hierarchy(vis.data[i][1])
                 .sort((a, b) => (a.height - b.height) || a.data.coin.localeCompare(b.data.name));
@@ -75,7 +80,7 @@ FamilyTree.prototype.initVis = function() {
                 .attr("transform", `translate(${vis.root.dy / 3},${vis.root.dx - x0})`);
 
             vis.wrangleData();
-        }, i*500);
+        }, i*100);
     }
 };
 
@@ -103,11 +108,13 @@ FamilyTree.prototype.updateVis = function() {
 
     /* Draw vis using vis.displayData */
 
+    vis.lineChart.updateVerticalLine(vis.date, vis.lineChart, vis.i);
+
     var treeDate = d3.timeFormat('%B %Y')(vis.date);
     d3.select('#tree-date-label').node().innerHTML = `${treeDate}`;
 
     // Draw links
-    let links = d3.select('.links-g')
+    let links = vis.svg.selectAll('.links-g')
         .selectAll(".tree-link")
         .data(vis.displayData.links(), function(d) {return d;});
 
@@ -124,8 +131,13 @@ FamilyTree.prototype.updateVis = function() {
       `);
 
     // Draw circles
-    let circles = vis.svg.selectAll('.node-circle')
-        .data(vis.displayData.descendants().reverse(), function(d) {return d.data.coin});
+    let circles = vis.svg.selectAll('.nodes-g')
+        .selectAll('.node-circle')
+        .data(vis.displayData.descendants().reverse(), function(d) {return d});
+
+    let tip = d3.tip().attr('class', 'd3-tip');
+
+    vis.svg.call(tip);
 
     circles.enter().append('circle')
         .attr('class', 'node-circle')
@@ -134,27 +146,48 @@ FamilyTree.prototype.updateVis = function() {
         // .duration(500)
         .attr("transform", function(d) {
             if (!isNaN(d.data.coin)) {
-                return `translate(${d.y - 8},${d.x})`
+                return `translate(${d.y},${d.x})`
             }
             else {
                 return `translate(${d.y},${d.x})`
             }
         })
         .attr("fill", function(d) {
-            return d.data.status === "running" ? 'white' : '#ffb3ba'
+            return (d.data.status === "running" || Array.isArray(d.data.status)) ? 'white' : '#ffb3ba'
         })
         .attr("r", function(d) {
             if (!isNaN(d.data.coin)) {
-                var num = Number(d.data.coin)
-                return num*.1 + 1;
+                var num = Number(d.data.coin);
+                return num*.1 + 2;
             }
             else {
                 return 3;
             }
+        })
+        .attr('stroke', 'black')
+        .attr('stroke-width', '.5')
+        .on('mouseover', function(d) {
+            if (vis.i === 37) {
+                var tipList = d.data.status.map(function(coin) {
+                    return Object.keys(coin)[0]
+                });
+                var tipText = '';
+                tipList.forEach(function(d) {
+                    tipText += d.toString() + " ";
+                });
+                tip.html(tipText);
+                tip.show();
+            }
+        })
+        .on('mouseout', function(d) {
+            if (vis.i === 37) {
+                tip.hide();
+            }
         });
 
     // Draw labels
-    let labels = vis.svg.selectAll('.node-text')
+    let labels = vis.svg.selectAll('.labels-g')
+        .selectAll('.node-text')
         .data(vis.displayData.descendants().reverse(), function(d) {return d.data.coin});
 
     labels.enter().append("text")
@@ -162,10 +195,11 @@ FamilyTree.prototype.updateVis = function() {
         .merge(labels)
         .attr("dy", "0.31em")
         .attr("transform", d => `translate(${d.y},${d.x})`)
-        .attr("x", d => d.children ? -6 : 6)
+        .attr("x", d => d.children ? -6 : (!isNaN(d.data.coin) ? 15 : 6))
         .text(d => d.data.coin)
         .filter(d => d.children)
         .attr("text-anchor", "end")
+        .attr('opacity', 1)
         .clone(true).lower();
 
     // Exit

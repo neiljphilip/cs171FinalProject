@@ -23,7 +23,7 @@ TreeLineChart.prototype.initVis = function() {
     vis.margin = { top: 40, right: 40, bottom: 40, left: 70 };
 
     vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right,
-        vis.height = 300 - vis.margin.top - vis.margin.bottom;
+        vis.height = 250 - vis.margin.top - vis.margin.bottom;
 
     // SVG drawing area
     vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -79,7 +79,7 @@ TreeLineChart.prototype.updateVis = function() {
     var vis = this;
 
     /* Draw vis using vis.displayData */
-    vis.x.domain(d3.extent(vis.displayData, function(d) { return d.date; }))
+    vis.x.domain(d3.extent(vis.displayData, function(d) { return d.date; }));
     vis.y.domain([0, d3.max(vis.displayData, function(d) { return d.numCoins; })])
 
     // Enter, update, exit
@@ -102,12 +102,16 @@ TreeLineChart.prototype.updateVis = function() {
     vis.svg.append('g')
         .attr('class', 'axis-label')
         .append('text')
-        .attr('x', -1 * vis.height + 80)
+        .attr('x', -1 * vis.height + 80 - 25)
         .attr('y', -50)
         .attr('transform', 'rotate(-90)')
         .text('# of Coins');
 
-    vis.svg.append()
+    vis.svg.append('text')
+        .attr('class', 'axis-label caption-label')
+        .attr('x', vis.width*.05)
+        .attr('y', vis.height + vis.margin.bottom)
+        .text('Includes running & defunct coins.')
 
 };
 
@@ -116,10 +120,48 @@ TreeLineChart.prototype.updateVis = function() {
  * E.g. brush, inputs, event trigger from another visualization in the dashboard (apply parameters as necessary)
  */
 
-TreeLineChart.prototype.updateVerticalLine = function() {
-    var vis = this;
+TreeLineChart.prototype.updateVerticalLine = function(date, chart, i) {
+    // var vis = this;
 
-    // Update vis.filteredData
+    // console.log(chart)
+    let lineData = {};
+    lineData['x'] = chart.x(date);
+    lineData['y1'] = 0;
+    lineData['y2'] = chart.height;
 
-    vis.wrangleData();
+    let verticalLine = chart.svg.selectAll('.vertical-line')
+        .data([lineData]);
+
+    verticalLine.enter().append('line')
+        .attr('class', 'vertical-line')
+        .merge(verticalLine)
+        .attr('x1', d => d.x)
+        .attr('x2', d => d.x)
+        .attr('y1', d => d.y1)
+        .attr('y2', d => d.y2)
+        .style('stroke', 'white');
+
+    verticalLine.exit().remove();
+
+    var treeDate = d3.timeFormat('%B %Y')(date);
+
+    let coinNum = chart.displayData[i].numCoins;
+    let tip = d3.tip().attr('class', 'd3-tip').html(`${treeDate}<br>Coins: ${coinNum}`);
+
+    chart.svg.call(tip);
+
+    let circleData = {};
+    circleData['x'] = chart.x(date);
+    circleData['y'] = chart.y(coinNum);
+
+    chart.svg.append('circle')
+        .attr('class', 'node-circle')
+        .attr('cx', circleData.x)
+        .attr('cy', circleData.y)
+        .attr('r', 3)
+        .attr('fill', 'white')
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
+
+
 };

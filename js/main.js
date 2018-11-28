@@ -49,8 +49,9 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     });
 
     // Create visualization instances
-    var familyTree = new FamilyTree("family-tree", coinTreeFilteredData);
     var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
+    var familyTree = new FamilyTree("family-tree", coinTreeFilteredData, treeLineChart);
+
 
 
     /* Bind event handlers */
