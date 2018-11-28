@@ -295,7 +295,16 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
                     el.find('.block-status').animate({ opacity: 0 });
                 }, 1000);
             }
-        }, 1000, statusStrings.length)
+        }, 1000, statusStrings.length);
+
+        // Takes about 5 secs to find block
+        var timeToFindBlock = 5000;
+        setTimeout(function() {
+            var el = $('#' + id);
+            el.find('.divider-line').animate({ height: '100px' });
+
+            el.next().addClass('active');
+        }, timeToFindBlock)
     }
 
     function getHash() {

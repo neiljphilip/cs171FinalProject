@@ -37,18 +37,34 @@ a:hover {
 }
 
 .section {
-    background-color: #262626;
+    background-color: #595959;
     padding: 30px;
-    border-style: solid;
+    border-style: dashed;
     border-color: gray;
     border-width: 5px;
     border-radius: 50px;
+
+    transition: 0.5s;
+}
+
+.section.active {
+    background-color: #262626;
+    border-style: solid;
+}
+
+.section .section-content {
+    opacity: 0;
+}
+
+.section.active .section-content {
+    opacity: 1;
 }
 
 /* Section divider and hash stuff */
 .section-divider {
     position: relative;
     display: flex;
+    height: 100px;
     align-items: center;
 }
 
@@ -56,9 +72,13 @@ a:hover {
     flex: 1;
 }
 
+.divider-line-wrapper {
+    height: 100px;
+}
+
 .divider-line {
     width: 10px;
-    height: 100px;
+    height: 0;
     background-color: #262626;
     border-style: solid;
     border-color: gray;
