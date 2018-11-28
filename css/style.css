@@ -10,7 +10,7 @@ img{
   max-width: 100%;
 }
 body {
-	background-color: #262626;
+    background-color: #595959;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -36,6 +36,74 @@ a:hover {
     text-decoration: none;
 }
 
+.section {
+    background-color: #262626;
+    padding: 30px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 5px;
+    border-radius: 50px;
+}
+
+/* Section divider and hash stuff */
+.section-divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.section-divider > * {
+    flex: 1;
+}
+
+.divider-line {
+    width: 10px;
+    height: 100px;
+    background-color: #262626;
+    border-style: solid;
+    border-color: gray;
+    border-width: 0 1px 0;
+    margin: auto;
+}
+
+.block-status {
+    color: lightgray;
+    text-align: center;
+    font-size: 16px;
+    opacity: 1;
+}
+
+.hash-table {
+    width: 100%;
+}
+
+.hash-table td {
+    font-size: 12px;
+    color: lightgray;
+}
+
+.block-data-title {
+    font-weight: bold;
+}
+
+.block-data-value {
+    text-align: right;
+}
+/* Section divider and hash stuff */
+
+/* fancy typer */
+.typewriter-wrapper {
+    position: relative;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+}
+
+.typewriter {
+    position: absolute;
+}
+/* fancy typer */
+
 .gray {
     color: #969893;
 }
@@ -53,10 +121,6 @@ a:hover {
 
 .img-content img {
     width: 70%;
-}
-
-.section {
-    margin-top: 40px;
 }
 
 .container {

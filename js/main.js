@@ -206,6 +206,148 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
 
     /* Bind event handlers */
 
-    //Extra vizualiazations
+    //Extra visualizations
     var cChart = new BarChart("crimeChart", crimeData);
+
+    /* Miscellaneous */
+
+    // Fancy typer at start
+    $('.typewriter').typed({
+        strings: [
+            "<p>In 2008, the world reckoned with the coming of Bitcoin and the global introduction of cryptocurrency.</p><p>In 2018, it's hard to imagine a world without it.</p>"
+        ],
+        typeSpeed: 0,
+        contentType: 'html',
+        loop: false
+    });
+
+    // Block hash generators
+    var hashBlockData = [];
+    var hashBlockIndex = 0;
+    $('.section-divider').each(function() {
+        var el = $(this);
+
+        var hashStatus = getBlockStatus();
+        var dividerLine = getSectionDividerLine();
+        var hashBlock = getHashTable();
+
+        el.append(hashStatus);
+        el.append(dividerLine);
+        el.append(hashBlock);
+
+        var id = 'hash-block-' + hashBlockIndex;
+        el.attr('id', id);
+        hashBlockIndex += 1;
+
+        hashBlockData.push({
+            id: id,
+            heightTop: el.offset().top,
+            hit: false
+        });
+    });
+
+    var windowHeight = $(window).height();
+    $(window).scroll(function() {
+        triggerHashes($(this).scrollTop(), windowHeight);
+    });
+
+    // Start hashes which are on or before the portion of the page you've hit on reload
+    // Scroll won't trigger hashes when you first load page
+    triggerHashes($(document).scrollTop(), windowHeight);
+
+    function triggerHashes(scrollTop, windowHeight) {
+        for (var i = 0; i < hashBlockData.length; ++i) {
+            var hashBlock = hashBlockData[i];
+            var hT = hashBlock.heightTop,
+                hit = hashBlock.hit,
+                id = hashBlock.id;
+
+            if ((scrollTop > (hT - windowHeight + 50)) && !hit){
+                setHashTimeout(id);
+                hashBlockData[i].hit = true;
+            }
+        }
+    }
+
+    function setHashTimeout(id) {
+        var totalHashes = 25;
+        setDeceleratingTimeout(function() {
+            var el = $('#' + id);
+            el.find('.block-hash').text(getHash());
+            el.find('.block-nonce').text(getHexadecimal());
+            el.find('.block-bits').text(getHexadecimal());
+        }, 10, totalHashes);
+
+        var statusStrings = [
+            "Generating cryptographic nonce...",
+            "Aggregating transactions...",
+            "Found a new block!"
+        ];
+        var curStatus = 0;
+        setDeceleratingTimeout(function() {
+            var el = $('#' + id);
+            el.find('.block-status').text(statusStrings[curStatus]);
+            curStatus += 1;
+
+            if (curStatus === statusStrings.length) {
+                setTimeout(function() {
+                    el.find('.block-status').animate({ opacity: 0 });
+                }, 1000);
+            }
+        }, 1000, statusStrings.length)
+    }
+
+    function getHash() {
+        return faker.finance.bitcoinAddress();
+    }
+
+    function getHexadecimal() {
+        var max = 10000000000;
+        var min = 100000000;
+        var num = Math.floor(Math.random() * (max - min + 1)) + min;
+        return '0x' + num.toString(16);
+    }
+
+    function setDeceleratingTimeout(callback, factor, times)
+    {
+        var internalCallback = function(tick, counter) {
+            return function() {
+                if (--tick >= 0) {
+                    window.setTimeout(internalCallback, ++counter * factor);
+                    callback();
+                }
+            }
+        }(times, 0);
+
+        window.setTimeout(internalCallback, factor);
+    }
+
+    function getBlockStatus() {
+        return "<div class='block-status'>Computing block hash...</div>";
+    }
+
+    function getSectionDividerLine() {
+        return "<div class='divider-line-wrapper'>" +
+                    "<div class='divider-line'></div>" +
+                "</div>";
+    }
+
+    function getHashTable() {
+        return "<div class='hash-block'>" +
+                "<table class='hash-table'>" +
+                    "<tr>" +
+                        "<td class='block-data-title'>blockhash</td>" +
+                        "<td class='block-data-value block-hash'></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td class='block-data-title'>nonce</td>" +
+                        "<td class='block-data-value block-nonce'></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td class='block-data-title'>bits</td>" +
+                        "<td class='block-data-value block-bits'></td>" +
+                    "</tr>" +
+                "</table>" +
+            "</div>";
+    }
 }
