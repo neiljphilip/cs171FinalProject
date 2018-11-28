@@ -116,13 +116,15 @@ FamilyTree.prototype.updateVis = function() {
     // Draw links
     let links = vis.svg.selectAll('.links-g')
         .selectAll(".tree-link")
-        .data(vis.displayData.links(), function(d) {return d;});
+        .data(vis.displayData.links(), function(d) {
+            return d.source.data.coin + '-' + d.target.data.coin;
+        });
 
     links.enter().append("path")
         .attr('class', 'tree-link')
         .merge(links)
-        // .transition()
-        // .duration(500)
+        .transition()
+        .duration(500)
         .attr("d", d => `
         M${d.target.y},${d.target.x}
         C${d.source.y + vis.displayData.dy / 2},${d.target.x}
@@ -133,7 +135,15 @@ FamilyTree.prototype.updateVis = function() {
     // Draw circles
     let circles = vis.svg.selectAll('.nodes-g')
         .selectAll('.node-circle')
-        .data(vis.displayData.descendants().reverse(), function(d) {return d});
+        .data(vis.displayData.descendants().reverse(), function(d) {
+            if (d.parent) {
+                if (!isNaN(d.data.coin)) {
+                    return d.parent.data.coin + '-num';
+                }
+                return d.parent.data.coin + '-' + d.data.coin
+            }
+            return d.data.coin;
+        });
 
     let tip = d3.tip().attr('class', 'd3-tip');
 
@@ -141,39 +151,47 @@ FamilyTree.prototype.updateVis = function() {
 
     circles.enter().append('circle')
         .attr('class', 'node-circle')
-        .merge(circles)
-        // .transition()
-        // .duration(500)
-        .attr("transform", function(d) {
-            if (!isNaN(d.data.coin)) {
-                return `translate(${d.y},${d.x})`
+        .attr('cx', function(d) {
+            if (d.parent) {
+                return d.parent.y;
             }
-            else {
-                return `translate(${d.y},${d.x})`
-            }
+            return 0;
         })
+        .attr('cy', function(d) {
+            if (d.parent) {
+                return d.parent.x;
+            }
+            return 0;
+        })
+        .merge(circles)
+        .transition()
+        .duration(500)
+        .attr('cx', function(d) { return d.y; })
+        .attr('cy', function(d) { return d.x; })
         .attr("fill", function(d) {
             return (d.data.status === "running" || Array.isArray(d.data.status)) ? 'white' : '#ffb3ba'
         })
         .attr("r", function(d) {
             if (!isNaN(d.data.coin)) {
                 var num = Number(d.data.coin);
-                return num*.1 + 2;
+                return num * 0.1 + 2;
             }
             else {
                 return 3;
             }
         })
         .attr('stroke', 'black')
-        .attr('stroke-width', '.5')
-        .on('mouseover', function(d) {
+        .attr('stroke-width', '.5');
+
+    circles.on('mouseover', function(d) {
             if (vis.i === 37) {
                 var tipList = d.data.status.map(function(coin) {
                     return Object.keys(coin)[0]
                 });
                 var tipText = '';
-                tipList.forEach(function(d) {
-                    tipText += d.toString() + " ";
+                tipList.forEach(function(d, i) {
+                    tipText += d.toString();
+                    if (i !== tipList.length - 1) tipText += ", ";
                 });
                 tip.html(tipText);
                 tip.show();
@@ -188,19 +206,34 @@ FamilyTree.prototype.updateVis = function() {
     // Draw labels
     let labels = vis.svg.selectAll('.labels-g')
         .selectAll('.node-text')
-        .data(vis.displayData.descendants().reverse(), function(d) {return d.data.coin});
+        .data(vis.displayData.descendants().reverse(), function(d) {
+            if (d.parent) {
+                if (!isNaN(d.data.coin)) {
+                    return d.parent.data.coin + '-num';
+                }
+                return d.parent.data.coin + '-' + d.data.coin
+            }
+            return d.data.coin;
+        });
 
     labels.enter().append("text")
         .attr('class', 'node-text')
         .merge(labels)
+        .attr("transform", function(d) {
+            if (d.parent) {
+                return `translate(${d.parent.y},${d.parent.x})`
+            }
+            return 'translate(0,0)';
+        })
+        .transition()
+        .duration(500)
         .attr("dy", "0.31em")
         .attr("transform", d => `translate(${d.y},${d.x})`)
         .attr("x", d => d.children ? -6 : (!isNaN(d.data.coin) ? 15 : 6))
         .text(d => d.data.coin)
         .filter(d => d.children)
         .attr("text-anchor", "end")
-        .attr('opacity', 1)
-        .clone(true).lower();
+        .attr('opacity', 1);
 
     // Exit
     links.exit().remove();
