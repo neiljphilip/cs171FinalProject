@@ -117,13 +117,13 @@ dragGlobe.prototype.initVis = function() {
             var attitude = getAtt(countryN);
 
             if (attitude == "permissive") {
-                css = '.land:hover { fill: green !important; }';
+                css = '.land:hover { fill: #6ed4f0 !important; }';
             } else if (attitude == "contentious") {
                 css = '.land:hover { fill: yellow !important; }';
             } else if (attitude == "hostile") {
-                css = '.land:hover { fill: red !important; }';
+                css = '.land:hover { fill: #ff6200 !important; }';
             } else if (attitude == "none") {
-                css = '.land:hover { fill: #d3d3d3 !important; }';
+                css = '.land:hover { fill: black !important; }';
             }
 
             else css = '.land:hover { fill: red }';
@@ -148,6 +148,60 @@ dragGlobe.prototype.initVis = function() {
                 .style("top", (d3.event.pageY - 15) + "px");
         })
         .on("click", textUpdate);
+
+    // legend
+
+    vis.svg
+        .append("rect")
+        .attr("class", "legendBox")
+        .attr("x", vis.width - 80)
+        .attr("y", vis.height - 100)
+        .attr("height", 20)
+        .attr("width", 20)
+        .style("fill", "green")
+        .style("stroke", "black")
+        .style("stroke-width", 2);
+
+
+    vis.svg
+        .append("rect")
+        .attr("class", "legendBox")
+        .attr("x", vis.width - 80)
+        .attr("y", vis.height - 70)
+        .attr("height", 20)
+        .attr("width", 20)
+        .style("fill", "red")
+        .style("stroke", "black")
+        .style("stroke-width", 2);
+
+    vis.svg.append("text")
+        .attr("class", "legLabel")
+        .attr("x", vis.width - 100)
+        .attr("y", vis.height - 110)
+        .text(function(d) {
+            return "Bitcoin Legality";
+        })
+        .style("fill", "whitesmoke");
+    // text labels
+vis.svg.append("text")
+        .attr("class", "legLabel")
+        .attr("x", vis.width - 50)
+        .attr("y", vis.height - 85)
+        .text(function(d) {
+           return "Legal";
+        })
+    .style("fill", "whitesmoke");
+
+    vis.svg.append("text")
+        .attr("class", "legLabel")
+        .attr("x", vis.width - 50)
+        .attr("y", vis.height - 55)
+        .text(function(d) {
+            return "Illegal";
+        })
+        .style("fill", "whitesmoke");
+
+
 
 
 
@@ -225,16 +279,16 @@ dragGlobe.prototype.initVis = function() {
 
        if (attitudeVal == "permissive") {
               attStatement += "Permissive";
-           updateText("att", attStatement + " to crypto.");
-           d3.select("#att").style("color", "green");
+           updateText("att", "Public is " + attStatement + " of crypto.");
+           d3.select("#att").style("color", "#6ed4f0");
            } else if (attitudeVal == "contentious") {
               attStatement += "Contentious";
-           updateText("att", attStatement + " to crypto.");
+           updateText("att", "Public is " + attStatement + " on crypto.");
            d3.select("#att").style("color", "yellow");
            } else if (attitudeVal == "hostile") {
            attStatement += "Hostile";
-           updateText("att", "Government is " + attStatement + " to crypto.");
-           d3.select("#att").style("color", "red");
+           updateText("att", "Public is " + attStatement + " to crypto.");
+           d3.select("#att").style("color", "#ff6200");
        }
 
 

@@ -31,7 +31,7 @@ function bubbleChart() {
 		chartSVG=svg;
 
 		var tooltip = selection
-		.append("div")
+		.append("a")
 		.style("position", "absolute")
 		.style("visibility", "hidden")
 		.style("color", "white")
@@ -58,7 +58,7 @@ function bubbleChart() {
 
 		var colorCircles;
 		if (!customColors) {
-			colorCircles = d3.scaleOrdinal(["gray", "rgb(255, 187, 120)", "rgb(148, 103, 189)", "rgb(44, 160, 44)", "rgb(255, 127, 14)", "rgb(197, 176, 213)", "rgb(174, 199, 232)", "rgb(31, 119, 180)"]);
+			colorCircles = d3.scaleOrdinal(["rgb(153, 153, 153)", "rgb(255, 187, 120)", "rgb(148, 103, 189)", "rgb(44, 160, 44)", "rgb(255, 127, 14)", "rgb(197, 176, 213)", "rgb(174, 199, 232)", "rgb(31, 119, 180)"]);
 		}
 		else {
 			colorCircles = d3.scaleOrdinal()
@@ -93,21 +93,27 @@ function bubbleChart() {
 				return "bubble";
 		})
 		.attr('r', function(d) {
-			return scaleRadius(d[columnForRadius]);
+			return scaleRadius(d[columnForRadius]) * 1.25;
 		})
 		.style("fill", function(d) {
-			return colorCircles(d[columnForColors]);
+            var color = colorCircles(d[columnForColors]);
+            color = color.substr(3, color.length - 4);
+            color = 'rgba' + color + ', 0.9)';
+			return color;
 		})
-		.on("mouseover", function(d) {
-			tooltip.html(d[columnForTitle] + "<br/>" + d[columnForColors] + "<br/>" + d[columnForRadius] + " "+ unitName);
-			return tooltip.style("visibility", "visible");
+		.style("stroke", function(d) {
+            return colorCircles(d[columnForColors]);
 		})
-		.on("mousemove", function() {
-			return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
-		})
-		.on("mouseout", function() {
-			return tooltip.style("visibility", "hidden");
-		})
+		// .on("mouseover", function(d) {
+		// 	tooltip.html(d[columnForTitle] + "<br/>" + d[columnForColors] + "<br/>" + d[columnForRadius] + " "+ unitName);
+		// 	return tooltip.style("visibility", "hidden");
+		// })
+		// .on("mousemove", function() {
+		// 	return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+		// })
+		// .on("mouseout", function() {
+		// 	return tooltip.style("visibility", "hidden");
+		// })
 		.append("svg:title")
 		.text(function(d){
 			return d[columnForRadius]+"\n"+"Transactions Per Second";
@@ -132,21 +138,21 @@ function bubbleChart() {
 			})
 			.text(function(d) {
 				return d[columnForTitle];
-			})
-			.on("mouseover", function(d) {
-				tooltip.html(d[columnForTitle] + "<br/>" + d[columnForColors] + "<br/>" + d[columnForRadius] + " "+ unitName);
-				return tooltip.style("visibility", "visible");
-			})
-			.on("mousemove", function() {
-				return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
-			})
-			.on("mouseout", function() {
-				return tooltip.style("visibility", "hidden");
-			})
-			.append("svg:title")
-			.text(function(d){
-				return d[columnForRadius]+"\n"+"Transactions Per Second";
 			});
+			// .on("mouseover", function(d) {
+			// 	tooltip.html(d[columnForTitle] + "<br/>" + d[columnForColors] + "<br/>" + d[columnForRadius] + " "+ unitName);
+			// 	return tooltip.style("visibility", "hidden");
+			// })
+			// .on("mousemove", function() {
+			// 	return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
+			// })
+			// .on("mouseout", function() {
+			// 	return tooltip.style("visibility", "hidden");
+			// })
+			// .append("svg:title")
+			// .text(function(d){
+			// 	return d[columnForRadius]+"\n"+"Transactions Per Second";
+			// });
 		}
 
 
