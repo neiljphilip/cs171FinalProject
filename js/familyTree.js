@@ -80,7 +80,7 @@ FamilyTree.prototype.initVis = function() {
                 .attr("transform", `translate(${vis.root.dy / 3},${vis.root.dx - x0})`);
 
             vis.wrangleData();
-        }, i*100);
+        }, i*500);
     }
 };
 

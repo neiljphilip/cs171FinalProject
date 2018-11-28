@@ -36,7 +36,37 @@ for file in files:
     for key in list(data[file].keys()):
         data[file][key] = list(filter(filterNodes, data[file][key]))
 
-pprint(data)
+## MERGE NODES
+datacopy = data
+result = {}
+
+for i, file in enumerate(files):
+    if i < 15:
+        result[file] = datacopy[file]
+    else:
+        result[file] = {}
+        for key in list(datacopy[file].keys()):
+            result[file][key] = []
+            incase = []
+            leaves = 0
+            for node in datacopy[file][key]:
+                nodeKey = list(node.keys())[0]
+                try:
+                    if len(datacopy[file][nodeKey]) > 0:
+                        result[file][key].append(node)
+                    else:
+                        incase.append(node)
+                        leaves += 1
+                except KeyError:
+                    incase.append(node)
+                    leaves += 1
+            if leaves > 0: #change to 1 to get coin names on last leaf
+                countNode = {str(leaves) : incase}
+                result[file][key].append(countNode)
+            elif leaves == 1:
+                result[file][key].append(incase[0])
+
+data = result
 
 def listify(node):
     node["coin"] = list(node.keys())[0]
