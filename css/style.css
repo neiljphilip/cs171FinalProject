@@ -54,6 +54,8 @@ a:hover {
 
 .section .section-content {
     opacity: 0;
+
+    transition: 0.5s;
 }
 
 .section.active .section-content {
