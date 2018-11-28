@@ -266,8 +266,7 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 }
 
 #family-tree {
-    height: 30vw;
-    overflow-y: auto;
+    height: 35vw;
 }
 
 .number-circle {

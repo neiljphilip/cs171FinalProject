@@ -6,7 +6,7 @@ queue()
     .defer(d3.text, "data/cryptoFinancialData.csv")
     .defer(d3.csv, "data/crime.csv")
     .defer(d3.json, "data/coinTreeAll.json")
-    .defer(d3.json, "data/coinTreeFiltered.json")
+    .defer(d3.json, "data/mergedCoinTree.json")
     .defer(d3.csv, "data/txSpeed.csv")
     .defer(d3.json,"data/world-110m.json")
     .defer(d3.tsv, "data/world-110m-country-names.tsv")
@@ -49,7 +49,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     });
 
     // Create visualization instances
-    var familyTree = new FamilyTree("family-tree", coinTreeData);
+    var familyTree = new FamilyTree("family-tree", coinTreeFilteredData);
     var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
 
 

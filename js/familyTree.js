@@ -132,11 +132,26 @@ FamilyTree.prototype.updateVis = function() {
         .merge(circles)
         // .transition()
         // .duration(500)
-        .attr("transform", d => `translate(${d.y},${d.x})`)
+        .attr("transform", function(d) {
+            if (!isNaN(d.data.coin)) {
+                return `translate(${d.y - 8},${d.x})`
+            }
+            else {
+                return `translate(${d.y},${d.x})`
+            }
+        })
         .attr("fill", function(d) {
             return d.data.status === "running" ? 'white' : '#ffb3ba'
         })
-        .attr("r", 3);
+        .attr("r", function(d) {
+            if (!isNaN(d.data.coin)) {
+                var num = Number(d.data.coin)
+                return num*.1 + 1;
+            }
+            else {
+                return 3;
+            }
+        });
 
     // Draw labels
     let labels = vis.svg.selectAll('.node-text')

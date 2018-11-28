@@ -14,6 +14,28 @@ files = ['10-2008', '04-2011', '08-2011', '09-2011', '10-2011', '01-2012', '02-2
 
 dataset = {}
 
+## FILTER FOR RUNNING COINS
+datacopy = data
+idx = None
+
+def hasRunning(idx, key):
+    try:
+        for child in idx[key]:
+            if list(child.values())[0] == 'running':
+                return True
+    except KeyError:
+        return False
+
+def filterNodes(node):
+    key = list(node.keys())[0]
+    value = list(node.values())[0]
+    return value == 'running' or hasRunning(idx, key)
+
+for file in files:
+    idx = datacopy[file]
+    for key in list(data[file].keys()):
+        data[file][key] = list(filter(filterNodes, data[file][key]))
+
 pprint(data)
 
 def listify(node):
