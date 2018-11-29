@@ -6,7 +6,7 @@
  * @param _data						-- the dataset 'household characteristics'
  * @param _config					-- variable from the dataset (e.g. 'electricity') and title for each bar chart
  */
- var formatD = d3.format(".2f");
+ var formatD = d3.format(".0f");
 
 BarChart = function(_parentElement, _data){
 	this.parentElement = _parentElement;
@@ -68,9 +68,9 @@ BarChart.prototype.initVis = function(){
 	vis.svg.append("text")
 		.text("Loss to Criminal Activity ($M)")
     .attr("class", "kennyText")
-		.attr("dx", vis.width)
-		.attr("text-anchor", "end")
-		.attr("dy", 0);
+		.attr("dx", vis.width/2)
+		.attr("text-anchor", "middle")
+		.attr("dy", -5);
 	// (Filter, aggregate, modify data)s
 	vis.wrangleData();
 }
@@ -138,7 +138,7 @@ BarChart.prototype.updateVis = function(){
 		.attr("text-anchor", "right")
 		.merge(vis.svg.selectAll(".text").data(vis.data))
 		.attr("dx", function(d) {return vis.x(d.loss) + 5;})
-		.text(function(d) {return d.loss});
+		.text(function(d) {return formatD(d.loss)});
 
 
 
