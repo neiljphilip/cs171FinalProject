@@ -55,6 +55,15 @@ ul li {
     color: whitesmoke;
 }
 
+ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+ul li {
+    color: whitesmoke;
+}
+
 .section {
     background-color: #595959;
     padding: 30px;

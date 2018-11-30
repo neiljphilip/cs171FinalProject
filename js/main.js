@@ -132,7 +132,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     });
 
     $('#finance-absolute-button').on('click', function() {
-      financeVolumeChart.onUpdateView('absolute');
+        financeVolumeChart.onUpdateView('absolute');
     });
 
     $('#finance-percent-button').on('click', function() {
@@ -181,6 +181,10 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         financeTimeline.updateDetailedWithDates(dateParser(event.dates[0]), dateParser(event.dates[1]));
 
         financeVolumeChart.onUpdateView(event.volumeType);
+
+        // highlight event as clicked
+        $('.number-circle').removeClass('active');
+        $(this).addClass('active');
     });
 
     /** Dashboard 3 **/

@@ -267,12 +267,16 @@ FinanceTimeline.prototype.updateVis = function() {
  */
 
 FinanceTimeline.prototype.onCoinChanged = function(coin) {
+    $('.number-circle').removeClass('active');
+
     var vis = this;
     vis.updateCoin(coin);
     vis.onUpdateFilters();
 };
 
 FinanceTimeline.prototype.onViewChanged = function(view) {
+    $('.number-circle').removeClass('active');
+
     var vis = this;
     vis.updateView(view);
     vis.onUpdateFilters();
@@ -299,10 +303,22 @@ FinanceTimeline.prototype.updateView = function(view) {
     vis.chosenView = view;
     // Historical defaults to entire view of coin
     if (view === "historical") {
+        let historicalButton = $('#finance-historical-button');
+        if (!historicalButton.hasClass('active')) {
+            historicalButton.addClass('active');
+        }
+        $('#finance-detailed-button').removeClass('active');
+
         $('.detailed-arrows').hide();
         $('#detailed-info').hide();
         vis.initHistorical();
     } else { // Detailed view defaults to current month
+        let detailedButton = $('#finance-detailed-button');
+        if (!detailedButton.hasClass('active')) {
+            detailedButton.addClass('active');
+        }
+        $('#finance-historical-button').removeClass('active');
+
         $('.detailed-arrows').show();
         $('#detailed-info').show();
         vis.initDetailed();
@@ -369,6 +385,8 @@ FinanceTimeline.prototype.updateDetailInputs = function(start, end) {
 };
 
 FinanceTimeline.prototype.updateDetailed = function(moveForward) {
+    $('.number-circle').removeClass('active');
+
     var vis = this;
 
     // Move forward or backward 4 months
