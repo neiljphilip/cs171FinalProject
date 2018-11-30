@@ -250,8 +250,12 @@ button {
     transition: 0.3s;
 }
 
+button.active {
+    background-color: #bfbfbf;
+}
+
 button:hover {
-    background-color: #666666;
+    background-color: #bfbfbf;
     cursor: pointer;
 }
 
@@ -384,6 +388,10 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 
 .number-circle {
     transition: 0.3s;
+}
+
+.number-circle.active {
+    background: gray;
 }
 
 .number-circle:hover {

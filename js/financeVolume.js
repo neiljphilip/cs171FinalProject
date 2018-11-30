@@ -288,11 +288,27 @@ FinanceVolumeChart.prototype.onUpdateData = function(selectionStart, selectionEn
 
 FinanceVolumeChart.prototype.onUpdateView = function(view) {
     var vis = this;
+    if (view === vis.chosenView) return;
+
+    $('.number-circle').removeClass('active');
+
     vis.chosenView = view;
 
     if (view === 'absolute') {
+        let absoluteButton = $('#finance-absolute-button');
+        if (!absoluteButton.hasClass('active')) {
+            absoluteButton.addClass('active');
+        }
+        $('#finance-percent-button').removeClass('active');
+
         d3.select('.y-axis-label').text('Volume (USD)');
     } else {
+        let percentButton = $('#finance-percent-button');
+        if (!percentButton.hasClass('active')) {
+            percentButton.addClass('active');
+        }
+        $('#finance-absolute-button').removeClass('active');
+
         d3.select('.y-axis-label').text('Volume (%)');
     }
 
