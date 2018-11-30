@@ -28,7 +28,7 @@ p {
 }
 
 p strong {
-    color: #969893;
+    color: #C8ADDC;
     font-weight: bold;
     font-size: 18px;
     text-decoration: underline;
@@ -143,8 +143,8 @@ ul li {
 }
 /* fancy typer */
 
-.gray {
-    color: #969893;
+.purple {
+    color: #9F78BD;
 }
 
 .text-header {
