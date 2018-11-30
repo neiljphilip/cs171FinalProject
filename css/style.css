@@ -4,7 +4,7 @@ body, html {
     width: 100%;
     height: 100%;
     font-family: 'Lato', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
 }
 img{
   max-width: 100%;
@@ -20,10 +20,18 @@ h1, h2, h3, h4, h5, h6 {
     padding: 10px 0;
 }
 
+
 p {
 	color: whitesmoke;
     padding: 5px 0;
     margin-bottom: 0;
+}
+
+p strong {
+    color: #969893;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: underline;
 }
 
 a {
@@ -34,6 +42,15 @@ a {
 a:hover {
     color: #eeb111;
     text-decoration: none;
+}
+
+ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+ul li {
+    color: whitesmoke;
 }
 
 .section {
@@ -132,6 +149,12 @@ a:hover {
 
 .text-header {
     font-size: 20px;
+}
+
+.text-subheader {
+    font-size: 14px;
+    color: #c0c1be;
+    padding: 0;
 }
 
 .img-content{
@@ -454,7 +477,6 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 }
 
 .sources ul {
-    color: whitesmoke;
     list-style: none;
     text-align: center;
     padding: 0;
