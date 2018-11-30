@@ -35,7 +35,9 @@ a:hover {
     color: #eeb111;
     text-decoration: none;
 }
-
+.linkA {
+  text-align: center;
+}
 .section {
     background-color: #595959;
     padding: 30px;
@@ -167,7 +169,45 @@ a:hover {
   justify-content: center;
 }
 /* TEXT - HEADERS, PARAGRAPHS */
-
+/* animation */
+.fadeMe {
+  opacity: 0;
+}
+.fadeMeR {
+  opacity: 0;
+}
+.fadeAni {
+  visibility: visible;
+  animation-name: fadeIn;
+  animation-duration: 1.5s;
+  animation-delay: 5s;
+}
+.fadeAniR{
+  visibility: visible;
+  animation-name: fadeInR;
+  animation-duration: 1.5s;
+  animation-delay: 5s;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+@keyframes fadeInR {
+  0% {
+    opacity: 0;
+    transform: translateX(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
 /* COMPONENTS - BUTTONS, FORMS, INPUTS */
 
 .axis text {

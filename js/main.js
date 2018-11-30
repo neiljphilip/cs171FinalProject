@@ -360,4 +360,30 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
                 "</table>" +
             "</div>";
     }
+    $(window).scroll(function() {
+      $('.fadeMe').each(function(){
+        var pos = $(this).offset().top;
+        var height = $(this).height();
+        var winTop = $(window).scrollTop();
+        var winHeight = $(window).height();
+
+        if (pos > winTop + winHeight) {
+          $(this).removeClass("fadeAni").addClass("fadeMe");
+        } else {
+          $(this).addClass("fadeAni").removeClass("fadeMe");
+        }
+      })
+      $('.fadeMeR').each(function(){
+        var pos = $(this).offset().top;
+        var height = $(this).height();
+        var winTop = $(window).scrollTop();
+        var winHeight = $(window).height();
+
+        if (pos > winTop + winHeight) {
+          $(this).removeClass("fadeAniR").addClass("fadeMeR");
+        } else {
+          $(this).addClass("fadeAniR").removeClass("fadeMeR");
+        }
+      })
+    })
 }
