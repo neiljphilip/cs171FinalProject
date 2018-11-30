@@ -76,6 +76,41 @@ function bubbleChart() {
 		.domain([minRadiusDomain, maxRadiusDomain])
 		.range([minRadius, maxRadius])
 
+		var squares = svg.selectAll("rect")
+		.data(data)
+		.enter()
+		.append("g")
+		.style("opacity",1);
+
+		squares.append("rect")
+		.attr("class","bubLegend")
+		.attr("width",20)
+		.attr("height", 20)
+		.attr("x", 0)
+		.attr("y", function(d, i){
+			return 0 + (i*25);
+		})
+		.attr("fill", function(d){
+			return colorCircles(d[columnForColors]);
+		});
+		squares.append("text")
+		.attr("x", 25)
+		.attr("y", function(d, i){
+			return 14 + (i*25);
+		})
+		.attr("class", "kennyText")
+		.attr("text-anchor", "start")
+		.text(function(d){
+			return d[columnForRadius]+"\n"+"TPS";
+		});
+
+		svg.append("text")
+		.attr("class", "kennyText")
+		.attr("x", width)
+		.attr("y", height - 12)
+		.attr("text-anchor", "end")
+		.style("font-size", "12px")
+		.text("Transaction speed data as of 2018");
 		var node = svg.selectAll("circle")
 		.data(data)
 		.enter()
@@ -90,7 +125,7 @@ function bubbleChart() {
 			return i;
 		})
 		.attr("class", function(d){
-				return "bubble";
+				return "bubble "+d[columnForTitle];
 		})
 		.attr('r', function(d) {
 			return scaleRadius(d[columnForRadius]) * 1.25;
@@ -161,6 +196,7 @@ function bubbleChart() {
 			.attr("text-anchor", "middle")
 			.attr("font-size","1.8em")
 			.text(title);
+
 	}
 
 
