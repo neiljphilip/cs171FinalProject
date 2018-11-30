@@ -254,6 +254,31 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     var windowHeight = $(window).height();
     $(window).scroll(function() {
         triggerHashes($(this).scrollTop(), windowHeight);
+
+        $('.fadeMe').each(function(){
+            var pos = $(this).offset().top;
+            var height = $(this).height();
+            var winTop = $(window).scrollTop();
+            var winHeight = $(window).height();
+
+                if (pos > winTop + winHeight) {
+                  $(this).removeClass("fadeAni").addClass("fadeMe");
+                } else {
+                  $(this).addClass("fadeAni").removeClass("fadeMe");
+                }
+        });
+        $('.fadeMeR').each(function(){
+            var pos = $(this).offset().top;
+            var height = $(this).height();
+            var winTop = $(window).scrollTop();
+            var winHeight = $(window).height();
+
+                if (pos > winTop + winHeight) {
+                  $(this).removeClass("fadeAniR").addClass("fadeMeR");
+                } else {
+                  $(this).addClass("fadeAniR").removeClass("fadeMeR");
+                }
+        });
     });
 
     // Start hashes which are on or before the portion of the page you've hit on reload
