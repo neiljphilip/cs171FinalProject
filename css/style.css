@@ -4,7 +4,7 @@ body, html {
     width: 100%;
     height: 100%;
     font-family: 'Lato', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
 }
 img{
   max-width: 100%;
@@ -20,10 +20,18 @@ h1, h2, h3, h4, h5, h6 {
     padding: 10px 0;
 }
 
+
 p {
 	color: whitesmoke;
     padding: 5px 0;
     margin-bottom: 0;
+}
+
+p strong {
+    color: #C8ADDC;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: underline;
 }
 
 a {
@@ -38,6 +46,15 @@ a:hover {
 .linkA {
   text-align: center;
 }
+ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+ul li {
+    color: whitesmoke;
+}
+
 .section {
     background-color: #595959;
     padding: 30px;
@@ -128,12 +145,18 @@ a:hover {
 }
 /* fancy typer */
 
-.gray {
-    color: #969893;
+.purple {
+    color: #9F78BD;
 }
 
 .text-header {
     font-size: 20px;
+}
+
+.text-subheader {
+    font-size: 14px;
+    color: #c0c1be;
+    padding: 0;
 }
 
 .img-content{
@@ -267,8 +290,12 @@ button {
     transition: 0.3s;
 }
 
+button.active {
+    background-color: #bfbfbf;
+}
+
 button:hover {
-    background-color: #666666;
+    background-color: #bfbfbf;
     cursor: pointer;
 }
 
@@ -403,6 +430,10 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     transition: 0.3s;
 }
 
+.number-circle.active {
+    background: gray;
+}
+
 .number-circle:hover {
     cursor: pointer;
     background: gray;
@@ -494,7 +525,6 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 }
 
 .sources ul {
-    color: whitesmoke;
     list-style: none;
     text-align: center;
     padding: 0;
