@@ -75,7 +75,7 @@ function bubbleChart() {
 		var scaleRadius = d3.scaleLinear()
 		.domain([minRadiusDomain, maxRadiusDomain])
 		.range([minRadius, maxRadius])
-
+		var tt = svg.append("rect")
 		var squares = svg.selectAll("rect")
 		.data(data)
 		.enter()
@@ -92,7 +92,23 @@ function bubbleChart() {
 		})
 		.attr("fill", function(d){
 			return colorCircles(d[columnForColors]);
+		})
+		.on("mouseover", function(d){
+			var pos = $(this).offset().top;
+			var height = $(this).height();
+			var winTop = $(window).scrollTop();
+
+			$("#txTT").attr("style", "opacity:1;visibility: visible;top: "+d3.mouse(this)[1]+"px;left: "+(d3.mouse(this)[0] - $("#txChart svg").width())+"px;");
+			$("#txTT").addClass("fade").removeClass("fOut");
+			$("#txTT p").html(d[columnForColors]);
+
+		})
+		.on("mouseout", function(){
+			$("#txTT").attr("style", "opacity:0;top: "+d3.mouse(this)[1]+"px;left: "+(d3.mouse(this)[0] - $("#txChart svg").width())+"px;");
+			$("#txTT").removeClass("fade").addClass("fOut");
 		});
+
+
 		squares.append("text")
 		.attr("x", 25)
 		.attr("y", function(d, i){
@@ -102,7 +118,21 @@ function bubbleChart() {
 		.attr("text-anchor", "start")
 		.text(function(d){
 			return d[columnForRadius]+"\n"+"TPS";
-		});
+		})
+		.on("mouseover", function(d){
+			var pos = $(this).offset().top;
+			var height = $(this).height();
+			var winTop = $(window).scrollTop();
+			console.log(d3.mouse(this));
+
+			$("#txTT").attr("style", "opacity:1;visibility: visible;top: "+d3.mouse(this)[1]+"px;left: "+(d3.mouse(this)[0] - $("#txChart svg").width())+"px;");
+			$("#txTT").addClass("fade").removeClass("fOut");
+			$("#txTT p").html(d[columnForColors]);
+		})
+		.on("mouseout", function(){
+			$("#txTT").attr("style", "opacity:0;top: "+d3.mouse(this)[1]+"px;left: "+(d3.mouse(this)[0] - $("#txChart svg").width())+"px;");
+			$("#txTT").removeClass("fade").addClass("fOut");
+		});;
 
 		svg.append("text")
 		.attr("class", "kennyText")
