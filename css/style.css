@@ -221,40 +221,19 @@ ul li {
 .bubLegend:hover {
   cursor: pointer;
 }
-@keyframes fade {
-  0%{
-    opacity: 0;
-  }
-  100%{
-    opacity: 1;
-  }
-}
-@keyframes fOut {
-  0%{
-    opacity: 1;
-  }
-  100%{
-    opacity: 0;
-  }
-}
-.fade{
-  animation-name: fade;
-  animation-duration: .2s;
-}
-.fOut{
-  animation-name: fOut;
-  animation-duration: .2s;
-}
-#txTT {
-  position: relative;
+#txTT2 {
+  position: absolute;
   height: fit-content;
   padding: 2px 20px;
+  z-index: 10;
   border: 5px solid #a0a0a0;
   background: whitesmoke;
   border-radius: 19px;
   opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
 }
-#txTT p {
+#txTT2 p {
   color: #262626;
   white-space: nowrap;
 }

@@ -27,7 +27,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     }
     console.log(txData);
     //transactions speed data
-    var chart = bubbleChart().width(600).height(400).showTitleOnCircle(true);
+    var chart = bubbleChart().width(600).height(400).showTitleOnCircle(false);
     d3.select("#txChart").datum(txData).call(chart);
     /*** Create dashboards ***/
 

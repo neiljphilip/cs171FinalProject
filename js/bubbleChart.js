@@ -92,20 +92,6 @@ function bubbleChart() {
 		})
 		.attr("fill", function(d){
 			return colorCircles(d[columnForColors]);
-		})
-		.on("mouseover", function(d){
-			var pos = $(this).offset().top;
-			var height = $(this).height();
-			var winTop = $(window).scrollTop();
-
-			$("#txTT").attr("style", "opacity:1;visibility: visible;top: "+d3.mouse(this)[1]+"px;left: "+(d3.mouse(this)[0] - $("#txChart svg").width())+"px;");
-			$("#txTT").addClass("fade").removeClass("fOut");
-			$("#txTT p").html(d[columnForColors]);
-
-		})
-		.on("mouseout", function(){
-			$("#txTT").attr("style", "opacity:0;top: "+d3.mouse(this)[1]+"px;left: "+(d3.mouse(this)[0] - $("#txChart svg").width())+"px;");
-			$("#txTT").removeClass("fade").addClass("fOut");
 		});
 
 
@@ -117,22 +103,8 @@ function bubbleChart() {
 		.attr("class", "kennyText")
 		.attr("text-anchor", "start")
 		.text(function(d){
-			return d[columnForRadius]+"\n"+"TPS";
-		})
-		.on("mouseover", function(d){
-			var pos = $(this).offset().top;
-			var height = $(this).height();
-			var winTop = $(window).scrollTop();
-			console.log(d3.mouse(this));
-
-			$("#txTT").attr("style", "opacity:1;visibility: visible;top: "+d3.mouse(this)[1]+"px;left: "+(d3.mouse(this)[0] - $("#txChart svg").width())+"px;");
-			$("#txTT").addClass("fade").removeClass("fOut");
-			$("#txTT p").html(d[columnForColors]);
-		})
-		.on("mouseout", function(){
-			$("#txTT").attr("style", "opacity:0;top: "+d3.mouse(this)[1]+"px;left: "+(d3.mouse(this)[0] - $("#txChart svg").width())+"px;");
-			$("#txTT").removeClass("fade").addClass("fOut");
-		});;
+			return d[columnForColors];
+		});
 
 		svg.append("text")
 		.attr("class", "kennyText")
@@ -169,20 +141,31 @@ function bubbleChart() {
 		.style("stroke", function(d) {
             return colorCircles(d[columnForColors]);
 		})
-		// .on("mouseover", function(d) {
-		// 	tooltip.html(d[columnForTitle] + "<br/>" + d[columnForColors] + "<br/>" + d[columnForRadius] + " "+ unitName);
-		// 	return tooltip.style("visibility", "hidden");
-		// })
-		// .on("mousemove", function() {
-		// 	return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
-		// })
-		// .on("mouseout", function() {
-		// 	return tooltip.style("visibility", "hidden");
-		// })
-		.append("svg:title")
-		.text(function(d){
-			return d[columnForRadius]+"\n"+"Transactions Per Second";
-		});
+		.on("mouseover", function(d){
+			var pos = $(this).offset().top;
+			var height = $(this).height();
+			var winTop = $(window).scrollTop();
+			$("#txTT2").css({
+				opacity: 1,
+				top: d3.event.pageY,
+				left: d3.event.pageX
+			});
+
+			$("#txTT2 p").html(d[columnForColors] + "<br/>" + d[columnForRadius] + " TPS");
+		})
+		.on("mousemove",function(d){
+			var pos = $(this).offset().top;
+			var height = $(this).height();
+			var winTop = $(window).scrollTop();
+			$("#txTT2").css({
+				opacity: 1,
+				top: d3.event.pageY,
+				left: d3.event.pageX
+			});
+		})
+		.on("mouseout", function(){
+			$("#txTT2").css("opacity", "0");
+		});;
 		node.append("clipPath")
 		.attr("id",function(d,i) {
 			return "clip-"+i;
