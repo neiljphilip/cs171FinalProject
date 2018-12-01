@@ -65,7 +65,7 @@ function bubbleChart() {
 			.domain(customDomain)
 			.range(customRange);
 		}
-
+		console.log(data);
 		var minRadiusDomain = d3.min(data, function(d) {
 			return +d[columnForRadius];
 		});
@@ -77,7 +77,7 @@ function bubbleChart() {
 		.range([minRadius, maxRadius])
 		var tt = svg.append("rect")
 		var squares = svg.selectAll("rect")
-		.data(data)
+		.data(data, function(d, i) { return d + i; })
 		.enter()
 		.append("g")
 		.style("opacity",1);
@@ -88,9 +88,9 @@ function bubbleChart() {
 		.attr("height", 20)
 		.attr("x", 0)
 		.attr("y", function(d, i){
-			return 0 + (i*25);
+			return 0 + ((i)*25);
 		})
-		.attr("fill", function(d){
+		.attr("fill", function(d, i){
 			return colorCircles(d[columnForColors]);
 		});
 
@@ -98,7 +98,7 @@ function bubbleChart() {
 		squares.append("text")
 		.attr("x", 25)
 		.attr("y", function(d, i){
-			return 14 + (i*25);
+			return 14 + ((i)*25);
 		})
 		.attr("class", "kennyText")
 		.attr("text-anchor", "start")
