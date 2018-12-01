@@ -201,6 +201,8 @@ vis.svg.append("text")
         })
         .style("fill", "whitesmoke");
 
+    updateText("countryName", "Select Country");
+
 
 
 
@@ -266,7 +268,8 @@ vis.svg.append("text")
        updateText("countryName", countryN);
        var legalValue = getLegality(countryN);
        if (legalValue == "none") {
-           $("legality").empty();
+           updateText("legality", "Bitcoin Legality: No data available");
+           d3.select("#legality").style("color", "#d3d3d3");
        } else {
            updateText("legality", "Bitcoin is " + legalValue + " in this country.");
            if (legalValue == "Legal")  d3.select("#legality").style("color", "green");
@@ -289,6 +292,9 @@ vis.svg.append("text")
            attStatement += "Hostile";
            updateText("att", "Public is " + attStatement + " to crypto.");
            d3.select("#att").style("color", "#ff6200");
+       } else {
+           updateText("att", "Public Opinion: No data available.");
+           d3.select("#att").style("color", "#d3d3d3");
        }
 
 
