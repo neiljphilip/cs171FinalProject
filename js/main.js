@@ -327,7 +327,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         }, 1000, statusStrings.length);
 
         // Takes about 5 secs to find block
-        var timeToFindBlock = 500;
+        var timeToFindBlock = 5000;
         setTimeout(function() {
             var el = $('#' + id);
             el.find('.divider-line').animate({ height: '100px' });
