@@ -33,7 +33,7 @@ dragGlobe.prototype.initVis = function() {
     vis.projection = d3.geoOrthographic()
         .scale(200)
         .rotate([0, 0])
-        .translate([vis.width / 3, vis.height / 2])
+        .translate([vis.width / 2.8, vis.height / 2])
         .clipAngle(90);
 
     vis.path = d3.geoPath()

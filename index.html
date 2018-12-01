@@ -328,7 +328,17 @@
 						<div class="row">
 							<div class="col-6">
 								<p class="caption-label">Drag the globe with your mouse or click on a country for detailed information.</p>
-								<div id="choropleth"></div>
+
+								<div>
+									<select class="form-control input-lg" id="choropleth-option" onchange="updateChoropleth()">
+										<option value="legality">Bitcoin Legality</option>
+										<option value="attitude">Public Opinion</option>
+									</select>
+									<br>
+								</div>
+
+								<div id="choropleth">
+								</div>
 							</div>
 							<div class="col-6">
 								<div id="text-info">
