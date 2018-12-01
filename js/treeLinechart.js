@@ -20,10 +20,10 @@ TreeLineChart = function(_parentElement, _data, _eventHandler) {
 TreeLineChart.prototype.initVis = function() {
     var vis = this;
 
-    vis.margin = { top: 40, right: 40, bottom: 40, left: 70 };
+    vis.margin = { top: 10, right: 40, bottom: 40, left: 70 };
 
     vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right,
-        vis.height = 250 - vis.margin.top - vis.margin.bottom;
+        vis.height = 200 - vis.margin.top - vis.margin.bottom;
 
     // SVG drawing area
     vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -109,8 +109,8 @@ TreeLineChart.prototype.updateVis = function() {
 
     vis.svg.append('text')
         .attr('class', 'axis-label caption-label')
-        .attr('x', vis.width*.05)
-        .attr('y', vis.height + vis.margin.bottom - 3)
+        .attr('x', 0)
+        .attr('y', vis.height + vis.margin.bottom - 5)
         .text('Includes running & defunct coins.')
 
 };

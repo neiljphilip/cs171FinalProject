@@ -218,10 +218,25 @@ ul li {
 .kennyText {
   fill: whitesmoke;
 }
-.kennyText:hover, .bubble:hover {
+.bubLegend:hover {
   cursor: pointer;
 }
-
+#txTT2 {
+  position: absolute;
+  height: fit-content;
+  padding: 2px 20px;
+  z-index: 10;
+  border: 5px solid #a0a0a0;
+  background: whitesmoke;
+  border-radius: 19px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+#txTT2 p {
+  color: #262626;
+  white-space: nowrap;
+}
 .bubble {
     stroke-width: 5px;
 }
@@ -572,4 +587,11 @@ select {
 
 #pie {
     text-align: center;
+}
+
+#choropleth-option {
+   position: absolute;
+   left: 0px;
+    width: 450px;
+
 }

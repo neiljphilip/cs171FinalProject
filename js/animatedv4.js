@@ -33,7 +33,7 @@ dragGlobe.prototype.initVis = function() {
     vis.projection = d3.geoOrthographic()
         .scale(200)
         .rotate([0, 0])
-        .translate([vis.width / 3, vis.height / 2])
+        .translate([vis.width / 2.8, vis.height / 2])
         .clipAngle(90);
 
     vis.path = d3.geoPath()
@@ -201,6 +201,9 @@ vis.svg.append("text")
         })
         .style("fill", "whitesmoke");
 
+    updateText("countryName", "Select Country");
+
+
 
 
 
@@ -266,7 +269,8 @@ vis.svg.append("text")
        updateText("countryName", countryN);
        var legalValue = getLegality(countryN);
        if (legalValue == "none") {
-           $("legality").empty();
+           updateText("legality", "Bitcoin Legality: No data available");
+           d3.select("#legality").style("color", "#d3d3d3");
        } else {
            updateText("legality", "Bitcoin is " + legalValue + " in this country.");
            if (legalValue == "Legal")  d3.select("#legality").style("color", "green");
@@ -289,6 +293,9 @@ vis.svg.append("text")
            attStatement += "Hostile";
            updateText("att", "Public is " + attStatement + " to crypto.");
            d3.select("#att").style("color", "#ff6200");
+       } else {
+           updateText("att", "Public Opinion: No data available.");
+           d3.select("#att").style("color", "#d3d3d3");
        }
 
 
@@ -436,9 +443,21 @@ dragGlobe.prototype.updateVis = function() {
 dragGlobe.prototype.onUpdateData = function() {
     var vis = this;
 
+   console.log("redraw");
+     vis.svg.selectAll("path.land")
+        .style("fill", function(d) {
+            return "purple";
+            var countryN = vis.countryById[d.id];
+            var legality = getLegality(countryN);
+            if (legality == "Legal") return "green";
+            else if (legality == "Illegal") return "red";
+            else return "d3d3d3";
+        });
+
+
     // Update vis.filteredData
 
-    vis.wrangleData();
+  //  vis.wrangleData();
 };
 
 

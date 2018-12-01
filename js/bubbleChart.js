@@ -65,7 +65,7 @@ function bubbleChart() {
 			.domain(customDomain)
 			.range(customRange);
 		}
-
+		console.log(data);
 		var minRadiusDomain = d3.min(data, function(d) {
 			return +d[columnForRadius];
 		});
@@ -75,9 +75,9 @@ function bubbleChart() {
 		var scaleRadius = d3.scaleLinear()
 		.domain([minRadiusDomain, maxRadiusDomain])
 		.range([minRadius, maxRadius])
-
+		var tt = svg.append("rect")
 		var squares = svg.selectAll("rect")
-		.data(data)
+		.data(data, function(d, i) { return d + i; })
 		.enter()
 		.append("g")
 		.style("opacity",1);
@@ -88,20 +88,22 @@ function bubbleChart() {
 		.attr("height", 20)
 		.attr("x", 0)
 		.attr("y", function(d, i){
-			return 0 + (i*25);
+			return 0 + ((i)*25);
 		})
-		.attr("fill", function(d){
+		.attr("fill", function(d, i){
 			return colorCircles(d[columnForColors]);
 		});
+
+
 		squares.append("text")
 		.attr("x", 25)
 		.attr("y", function(d, i){
-			return 14 + (i*25);
+			return 14 + ((i)*25);
 		})
 		.attr("class", "kennyText")
 		.attr("text-anchor", "start")
 		.text(function(d){
-			return d[columnForRadius]+"\n"+"TPS";
+			return d[columnForColors];
 		});
 
 		svg.append("text")
@@ -139,20 +141,31 @@ function bubbleChart() {
 		.style("stroke", function(d) {
             return colorCircles(d[columnForColors]);
 		})
-		// .on("mouseover", function(d) {
-		// 	tooltip.html(d[columnForTitle] + "<br/>" + d[columnForColors] + "<br/>" + d[columnForRadius] + " "+ unitName);
-		// 	return tooltip.style("visibility", "hidden");
-		// })
-		// .on("mousemove", function() {
-		// 	return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
-		// })
-		// .on("mouseout", function() {
-		// 	return tooltip.style("visibility", "hidden");
-		// })
-		.append("svg:title")
-		.text(function(d){
-			return d[columnForRadius]+"\n"+"Transactions Per Second";
-		});
+		.on("mouseover", function(d){
+			var pos = $(this).offset().top;
+			var height = $(this).height();
+			var winTop = $(window).scrollTop();
+			$("#txTT2").css({
+				opacity: 1,
+				top: d3.event.pageY,
+				left: d3.event.pageX
+			});
+
+			$("#txTT2 p").html(d[columnForColors] + "<br/>" + d[columnForRadius] + " TPS");
+		})
+		.on("mousemove",function(d){
+			var pos = $(this).offset().top;
+			var height = $(this).height();
+			var winTop = $(window).scrollTop();
+			$("#txTT2").css({
+				opacity: 1,
+				top: d3.event.pageY,
+				left: d3.event.pageX
+			});
+		})
+		.on("mouseout", function(){
+			$("#txTT2").css("opacity", "0");
+		});;
 		node.append("clipPath")
 		.attr("id",function(d,i) {
 			return "clip-"+i;
