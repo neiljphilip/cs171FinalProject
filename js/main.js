@@ -27,7 +27,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     }
     console.log(txData);
     //transactions speed data
-    var chart = bubbleChart().width(600).height(400).showTitleOnCircle(true);
+    var chart = bubbleChart().width(600).height(400).showTitleOnCircle(false);
     d3.select("#txChart").datum(txData).call(chart);
     /*** Create dashboards ***/
 
@@ -327,7 +327,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         }, 1000, statusStrings.length);
 
         // Takes about 5 secs to find block
-        var timeToFindBlock = 5000;
+        var timeToFindBlock = 500;
         setTimeout(function() {
             var el = $('#' + id);
             el.find('.divider-line').animate({ height: '100px' });
