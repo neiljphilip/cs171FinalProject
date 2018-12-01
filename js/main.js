@@ -34,6 +34,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     /** Dashboard 1 **/
 
     // Clean Data
+
     var treeDateParse = d3.timeParse('%m-%Y');
 
     var coinTreeFilteredData = Object.keys(coinTreeFilteredJSON).map(function(key) {

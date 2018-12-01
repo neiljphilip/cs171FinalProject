@@ -110,7 +110,7 @@ TreeLineChart.prototype.updateVis = function() {
     vis.svg.append('text')
         .attr('class', 'axis-label caption-label')
         .attr('x', vis.width*.05)
-        .attr('y', vis.height + vis.margin.bottom)
+        .attr('y', vis.height + vis.margin.bottom - 3)
         .text('Includes running & defunct coins.')
 
 };
