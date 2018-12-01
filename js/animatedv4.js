@@ -207,6 +207,7 @@ vis.svg.append("text")
 
 
 
+
     // modified from http://bl.ocks.org/cyrilcherian/8f573be5c2dbc6620fedad8f7b1e247d/3fbb024bcfff8c2d0fe49f78deda74c29d42d1d3
 
     function spinning_globe(){
@@ -442,9 +443,21 @@ dragGlobe.prototype.updateVis = function() {
 dragGlobe.prototype.onUpdateData = function() {
     var vis = this;
 
+   console.log("redraw");
+     vis.svg.selectAll("path.land")
+        .style("fill", function(d) {
+            return "purple";
+            var countryN = vis.countryById[d.id];
+            var legality = getLegality(countryN);
+            if (legality == "Legal") return "green";
+            else if (legality == "Illegal") return "red";
+            else return "d3d3d3";
+        });
+
+
     // Update vis.filteredData
 
-    vis.wrangleData();
+  //  vis.wrangleData();
 };
 
 
