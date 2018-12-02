@@ -28,7 +28,7 @@ BarChart.prototype.initVis = function(){
 
 
 	// * TO-DO *
-	vis.margin = {top: 20, right: 70, bottom: 30, left: 50};
+	vis.margin = {top: 40, right: 70, bottom: 30, left: 50};
 
 	vis.width = $("#crimeChart").width() - vis.margin.left - vis.margin.right - 60,
     vis.height = 300 - vis.margin.top - vis.margin.bottom;
@@ -70,7 +70,7 @@ BarChart.prototype.initVis = function(){
     .attr("class", "kennyText")
 		.attr("dx", vis.width/2)
 		.attr("text-anchor", "middle")
-		.attr("dy", -5);
+		.attr("dy", -15);
 	// (Filter, aggregate, modify data)s
 	vis.wrangleData();
 }
@@ -117,27 +117,37 @@ BarChart.prototype.updateVis = function(){
 
 	vis.y.domain(vis.data.map(function(d){return d.crime;}));
 
-	//draw rectangles
-	vis.svg.selectAll(".bar")
-		.data(vis.data)
-		.enter().append("rect")
-		.attr("class", "bar")
+    //draw rectangles
+	var bars = vis.svg.selectAll(".crime-bar")
+        .data(vis.data);
+
+	bars.enter().append("rect")
+		.attr("class", "crime-bar")
 		.attr("y", function(d) {return vis.y(d.crime);})
 		.attr("height", vis.y.bandwidth())
-		.merge(vis.svg.selectAll(".bar").data(vis.data))
-		.transition()
-		.duration(800)
+		.attr('fill', 'rgba(255, 187, 120, 0.85)')
+		.merge(bars)
 		.attr("x", 0)
-		.attr("width", function(d) {return vis.x(d.loss);});
+		.attr("width", function(d) {return vis.x(d.loss);})
+		.on('mouseover', function() {
+			d3.select(this).attr('fill', 'rgba(255, 187, 120, 1.0)');
+		})
+        .on('mouseout', function() {
+            d3.select(this).attr('fill', 'rgba(255, 187, 120, 0.85)');
+        });
 
 	vis.svg.selectAll(".text")
 		.data(vis.data)
 		.enter().append("text")
 		.attr("class", "kennyText")
-		.attr("dy", function(d) {return vis.y(d.crime) + (vis.y.bandwidth()/2);})
+		.attr("dy", function(d) {
+			return vis.y(d.crime) + (vis.y.bandwidth() / 2) + 5;
+		})
 		.attr("text-anchor", "right")
 		.merge(vis.svg.selectAll(".text").data(vis.data))
-		.attr("dx", function(d) {return vis.x(d.loss) + 5;})
+		.attr("dx", function(d) {
+			return vis.x(d.loss) + 5;
+		})
 		.text(function(d) {return formatD(d.loss)});
 
 
