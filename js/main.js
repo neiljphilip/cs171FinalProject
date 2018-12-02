@@ -340,7 +340,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     }
 
     function setHashTimeout(id, dividerLength, longGeneration) {
-        var textDelayVal = longGeneration ? 10 : 5;
+        var textDelayVal = longGeneration ? 10 : 3;
         var totalHashes = 25;
         setDeceleratingTimeout(function() {
             var el = $('#' + id);
@@ -355,7 +355,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
             "Found a new block!"
         ];
         var curStatus = 0;
-        var stringDelayVal = longGeneration ? 1000 : 500;
+        var stringDelayVal = longGeneration ? 1000 : 300;
         setDeceleratingTimeout(function() {
             var el = $('#' + id);
             el.find('.block-status').text(statusStrings[curStatus]);
@@ -369,7 +369,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         }, stringDelayVal, statusStrings.length);
 
         // Takes about 5 secs to find block
-        var timeToFindBlock = longGeneration ? 5000 : 2500;
+        var timeToFindBlock = longGeneration ? 5000 : 1500;
         setTimeout(function() {
             var el = $('#' + id);
             el.find('.divider-line').animate({ height: dividerLength });
