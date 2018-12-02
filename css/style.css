@@ -31,7 +31,6 @@ p strong {
     color: #C8ADDC;
     font-weight: bold;
     font-size: 18px;
-    text-decoration: underline;
 }
 
 a {
@@ -263,9 +262,6 @@ ul li {
   color: #262626;
   white-space: nowrap;
 }
-.bubble {
-    stroke-width: 5px;
-}
 
 #txChart,#crimeChart {
   display: flex;
@@ -365,6 +361,28 @@ button:active, button:focus {
 .d3-tip p {
     margin: 5px 0;
     padding: 0;
+}
+
+/* Transaction Speed Bubble Chart */
+
+.bubble {
+    stroke-width: 5px;
+}
+
+.bubble-text {
+    fill: whitesmoke;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+.bubble-legend-label {
+    fill: whitesmoke;
+    pointer-events: none;
+    user-select: none;
+}
+
+#bubble-checkbox-label:hover {
+    cursor: pointer;
 }
 
 /* Dashboard 2 - Finance Data */

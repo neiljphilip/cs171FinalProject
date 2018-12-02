@@ -26,9 +26,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
       txData[i].txs = +txData[i].txs;
     }
     console.log(txData);
-    //transactions speed data
-    var chart = bubbleChart().width(600).height(400).showTitleOnCircle(false);
-    d3.select("#txChart").datum(txData).call(chart);
+
     /*** Create dashboards ***/
 
     /** Dashboard 1 **/
@@ -190,6 +188,18 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         // highlight event as clicked
         $('.number-circle').removeClass('active');
         $(this).addClass('active');
+    });
+
+    /* transactions speed data */
+    var transactionSpeedChart = new TransactionChart("transaction-speed-chart", txData);
+    $('#bubble-checkbox').on('change', function() {
+        var label = $('#bubble-checkbox-label');
+        var showTraditional = label.hasClass('active');
+        var newText = showTraditional ? 'Hide Traditional Processors' : 'Show Traditional Processors';
+
+        label.find('span').text(newText);
+
+        transactionSpeedChart.onUpdateData(showTraditional);
     });
 
     /** Dashboard 3 **/
@@ -359,7 +369,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         }, stringDelayVal, statusStrings.length);
 
         // Takes about 5 secs to find block
-        var timeToFindBlock = longGeneration ? 5000 : 2500;
+        var timeToFindBlock = longGeneration ? 5000 : 500;
         setTimeout(function() {
             var el = $('#' + id);
             el.find('.divider-line').animate({ height: dividerLength });

@@ -1,9 +1,9 @@
-title,coin,txs
-Visa,Visa,2400
-XRP,Ripple,1500
-PayPal,PayPal,193
-BCH,Bitcoin Cash,60
-LTC,LiteCoin,56
-Dash,Dash,28
-ETH,Ethereum,25
-BTC,Bitcoin,3
+title,coin,txs,coinLabel
+Visa,Visa,2400,visa
+XRP,Ripple,1500,ripple
+PayPal,PayPal,193,paypal
+BCH,Bitcoin Cash,60,bitcoin-cash
+LTC,LiteCoin,56,litecoin
+Dash,Dash,28,dash
+ETH,Ethereum,25,ethereum
+BTC,Bitcoin,3,bitcoin

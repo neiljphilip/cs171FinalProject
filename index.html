@@ -461,11 +461,13 @@
 								Think twice before using Bitcoin to pay for your next meal.
 							</p>
 							<p class="purple text-header">Transactions per Second</p>
-							<div id="txChart">
-								<svg>
-								</svg>
+							<div class="btn-group-toggle" data-toggle="buttons" style="margin-top: 15px;">
+								<label class="btn btn-secondary" id="bubble-checkbox-label">
+									<input type="checkbox" autocomplete="off" id="bubble-checkbox">
+									<span>Hide Traditional Processors</span>
+								</label>
 							</div>
-
+							<div id="transaction-speed-chart"></div>
 						</div>
 					</div>
 				</div>
@@ -587,6 +589,7 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/queue.v1.min.js"></script>
 		<script src="js/d3.min.js"></script>
+		<script src="js/d3-force.min.js"></script>
 		<script src="js/d3-tip.js"></script>
 		<script src="js/date.js"></script>
 		<script src="js/tippy.min.js"></script>
@@ -601,6 +604,7 @@
 		<!-- <script src="js/examplevis.js"></script> -->
 		<script src="js/crimeBarchart.js"></script>
 		<script src="js/bubbleChart.js"></script>
+		<script src="js/transactionChart.js"></script>
 		<script src="js/financeTimeline.js"></script>
 		<script src="js/financeVolume.js"></script>
 		<script src="js/financeTreemap.js"></script>

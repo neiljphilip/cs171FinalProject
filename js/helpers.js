@@ -41,3 +41,15 @@ const financeEvents = {
         "content": "The cryptocurrency market saw a short-lived bump in April of 2018 as the market rose about 30%. So-called 'alternative' coins did particular well, such as EOS with a 300% gain in a couple months."
     }
 };
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+function hexToRgba(hex, alpha) {
+    var rgb = hexToRgb(hex);
+    return 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + alpha +')';
+}
