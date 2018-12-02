@@ -346,8 +346,22 @@ button:hover {
     cursor: pointer;
 }
 
-button:active, button:focus {
+button:active, button:focus, select:active, select:focus {
     outline: none;
+}
+
+select {
+    background-color: #8c8c8c;
+    border: none;
+    padding: 5px 10px;
+    height: 30px;
+    color: whitesmoke;
+}
+
+#choropleth-option {
+    display: block;
+    margin: auto;
+    margin-top: 5px;
 }
 
 .d3-tip {
@@ -618,14 +632,6 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     stroke: #FFF;
     stroke-width: 0.7px;
 }
-select {
-    position: absolute;
-    top: 20px;
-    left: 580px;
-    border: solid #ccc 1px;
-    padding: 3px;
-    box-shadow: inset 1px 1px 2px #ddd8dc;
-}
 .countryTooltip {
     position: absolute;
     display: none;
@@ -641,11 +647,4 @@ select {
 
 #pie {
     text-align: center;
-}
-
-#choropleth-option {
-    position: absolute;
-    left: 0px;
-    width: 450px;
-
 }
