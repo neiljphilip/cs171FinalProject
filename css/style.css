@@ -319,9 +319,15 @@ ul li {
 }
 
 #tree-date-label {
+    display: inline-block;
     color: white;
     margin-top: 10px;
     margin-left: 20px;
+}
+#tree-reset-button {
+    margin-left: 20px;
+    padding: 2px 10px 2px 10px;
+    text-align: center;
 }
 
 #finance-dashboard {

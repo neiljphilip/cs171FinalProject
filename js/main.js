@@ -50,15 +50,16 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     });
 
     // Create visualization instances (called in setHashTimeout)
-
     function createTreeandChart() {
         var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
         var familyTree = new FamilyTree("family-tree", coinTreeFilteredData, treeLineChart);
+
+        /* Bind event handlers */
+        $('#tree-reset-button').on('click', function() {
+            familyTree.onResetClick();
+        });
     }
 
-
-
-    /* Bind event handlers */
 
     /** Dashboard 2 - Financial Data **/
 
@@ -360,7 +361,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
             el.find('.divider-line').animate({ height: dividerLength });
             el.next().addClass('active');
 
-            if (id === "hash-block-0") {
+            if (el.next()["0"].id === "family-tree-container") {
                 createTreeandChart();
             }
 

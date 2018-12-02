@@ -64,7 +64,6 @@ TreeLineChart.prototype.wrangleData = function() {
 
     // Perform any data manipulation if necessary on the filtered data
     vis.displayData = vis.filteredData;
-    console.log(vis.displayData);
 
     // Update the visualization
     vis.updateVis();
@@ -123,6 +122,10 @@ TreeLineChart.prototype.updateVis = function() {
 TreeLineChart.prototype.updateVerticalLine = function(date, chart, i) {
     // var vis = this;
 
+    if (i === 0) {
+        d3.selectAll('.line-chart-circle').remove();
+    }
+
     // console.log(chart)
     let lineData = {};
     lineData['x'] = chart.x(date);
@@ -155,7 +158,7 @@ TreeLineChart.prototype.updateVerticalLine = function(date, chart, i) {
     circleData['y'] = chart.y(coinNum);
 
     chart.svg.append('circle')
-        .attr('class', 'node-circle')
+        .attr('class', 'line-chart-circle')
         .attr('cx', circleData.x)
         .attr('cy', circleData.y)
         .attr('r', 3)

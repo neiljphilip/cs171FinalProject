@@ -9,6 +9,7 @@ FamilyTree = function(_parentElement, _data, _eventHandler) {
     this.data = _data;
     this.lineChart = _eventHandler;
     this.filteredData = this.data;
+    this.reset = false;
 
     this.initVis();
 };
@@ -20,35 +21,36 @@ FamilyTree = function(_parentElement, _data, _eventHandler) {
 FamilyTree.prototype.initVis = function() {
     var vis = this;
 
-    vis.margin = { top: 10, right: 10, bottom: 10, left: 10 };
+    if (vis.reset != true) {
+        vis.margin = { top: 10, right: 10, bottom: 10, left: 10 };
 
-    vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right,
-        vis.height = 500 - vis.margin.top - vis.margin.bottom;
+        vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right,
+            vis.height = 500 - vis.margin.top - vis.margin.bottom;
 
-    vis.svg = d3.select("#" + vis.parentElement).append('svg')
-        .attr("width", vis.width)
-        .attr('class', 'tree-SVG')
-        .append('g')
-        .attr('class', 'tree-g')
-        .attr('font-size', 10);
+        vis.svg = d3.select("#" + vis.parentElement).append('svg')
+            .attr("width", vis.width)
+            .attr('class', 'tree-SVG')
+            .append('g')
+            .attr('class', 'tree-g')
+            .attr('font-size', 10);
 
-    // links group
-    vis.svg.append('g')
-        .attr('class', 'links-g')
-        .attr("fill", "none")
-        .attr("stroke", "#555")
-        .attr("stroke-opacity", 0.4)
-        .attr("stroke-width", 1.5);
+        // links group
+        vis.svg.append('g')
+            .attr('class', 'links-g')
+            .attr("fill", "none")
+            .attr("stroke", "#555")
+            .attr("stroke-opacity", 0.4)
+            .attr("stroke-width", 1.5);
 
-    vis.svg.append('g')
-        .attr('class', 'nodes-g');
+        vis.svg.append('g')
+            .attr('class', 'nodes-g');
 
-    // labels group
-    vis.svg.append('g')
-        .attr('class', 'labels-g');
+        // labels group
+        vis.svg.append('g')
+            .attr('class', 'labels-g');
+    }
 
-
-
+    vis.reset = false;
 
     for (var i = 0; i < vis.data.length; i++) {
         setDelay(i);
@@ -80,7 +82,7 @@ FamilyTree.prototype.initVis = function() {
                 .attr("transform", `translate(${vis.root.dy / 3},${vis.root.dx - x0})`);
 
             vis.wrangleData();
-        }, i*500);
+        }, i*600);
     }
 };
 
@@ -109,6 +111,10 @@ FamilyTree.prototype.updateVis = function() {
     /* Draw vis using vis.displayData */
 
     vis.lineChart.updateVerticalLine(vis.date, vis.lineChart, vis.i);
+
+    if (vis.i === vis.data.length - 1) {
+        d3.select("#tree-reset-button").style('visibility', "visible");
+    }
 
     var treeDate = d3.timeFormat('%B %Y')(vis.date);
     d3.select('#tree-date-label').node().innerHTML = `${treeDate}`;
@@ -246,10 +252,12 @@ FamilyTree.prototype.updateVis = function() {
  * E.g. brush, inputs, event trigger from another visualization in the dashboard (apply parameters as necessary)
  */
 
-FamilyTree.prototype.onUpdateData = function() {
+FamilyTree.prototype.onResetClick = function() {
     var vis = this;
 
     // Update vis.filteredData
+    d3.select("#tree-reset-button").style('visibility', "hidden");
 
-    vis.wrangleData();
+    vis.reset = true;
+    vis.initVis();
 };
