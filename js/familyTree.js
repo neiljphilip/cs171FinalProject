@@ -51,6 +51,7 @@ FamilyTree.prototype.initVis = function() {
     }
 
     vis.reset = false;
+    vis.transitionTime = 500;
 
     for (var i = 0; i < vis.data.length; i++) {
         setDelay(i);
@@ -82,7 +83,7 @@ FamilyTree.prototype.initVis = function() {
                 .attr("transform", `translate(${vis.root.dy / 3},${vis.root.dx - x0})`);
 
             vis.wrangleData();
-        }, i*600);
+        }, i*vis.transitionTime);
     }
 };
 
@@ -130,7 +131,7 @@ FamilyTree.prototype.updateVis = function() {
         .attr('class', 'tree-link')
         .merge(links)
         .transition()
-        .duration(500)
+        .duration(vis.transitionTime)
         .attr("d", d => `
         M${d.target.y},${d.target.x}
         C${d.source.y + vis.displayData.dy / 2},${d.target.x}
@@ -171,7 +172,7 @@ FamilyTree.prototype.updateVis = function() {
         })
         .merge(circles)
         .transition()
-        .duration(500)
+        .duration(vis.transitionTime)
         .attr('cx', function(d) { return d.y; })
         .attr('cy', function(d) { return d.x; })
         .attr("fill", function(d) {
@@ -190,19 +191,19 @@ FamilyTree.prototype.updateVis = function() {
         .attr('stroke-width', '.5');
 
     circles.on('mouseover', function(d) {
-            if (vis.i === 37) {
-                var tipList = d.data.status.map(function(coin) {
-                    return Object.keys(coin)[0]
-                });
-                var tipText = '';
-                tipList.forEach(function(d, i) {
-                    tipText += d.toString();
-                    if (i !== tipList.length - 1) tipText += ", ";
-                });
-                tip.html(tipText);
-                tip.show();
-            }
-        })
+        if (vis.i === 37) {
+            var tipList = d.data.status.map(function(coin) {
+                return Object.keys(coin)[0]
+            });
+            var tipText = '';
+            tipList.forEach(function(d, i) {
+                tipText += d.toString();
+                if (i !== tipList.length - 1) tipText += ", ";
+            });
+            tip.html(tipText);
+            tip.show();
+        }
+    })
         .on('mouseout', function(d) {
             if (vis.i === 37) {
                 tip.hide();
@@ -232,7 +233,7 @@ FamilyTree.prototype.updateVis = function() {
             return 'translate(0,0)';
         })
         .transition()
-        .duration(500)
+        .duration(vis.transitionTime)
         .attr("dy", "0.31em")
         .attr("transform", d => `translate(${d.y},${d.x})`)
         .attr("x", d => d.children ? -6 : (!isNaN(d.data.coin) ? 15 : 6))

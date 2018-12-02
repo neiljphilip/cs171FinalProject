@@ -7,7 +7,7 @@ body, html {
     font-size: 16px;
 }
 img{
-  max-width: 100%;
+    max-width: 100%;
 }
 body {
     background-color: #595959;
@@ -22,7 +22,7 @@ h1, h2, h3, h4, h5, h6 {
 
 
 p {
-	color: whitesmoke;
+    color: whitesmoke;
     padding: 5px 0;
     margin-bottom: 0;
 }
@@ -161,42 +161,42 @@ ul li {
 
 /* ANIMATIONS */
 .fadeMe {
-  opacity: 0;
+    opacity: 0;
 }
 .fadeMeR {
-  opacity: 0;
+    opacity: 0;
 }
 .fadeAni {
-  visibility: visible;
-  animation-name: fadeIn;
-  animation-duration: 1.5s;
-  animation-delay: 5s;
+    visibility: visible;
+    animation-name: fadeIn;
+    animation-duration: 1.5s;
+    animation-delay: 5s;
 }
 .fadeAniR{
-  visibility: visible;
-  animation-name: fadeInR;
-  animation-duration: 1.5s;
-  animation-delay: 5s;
+    visibility: visible;
+    animation-name: fadeInR;
+    animation-duration: 1.5s;
+    animation-delay: 5s;
 }
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0%);
-  }
+    0% {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
 }
 @keyframes fadeInR {
-  0% {
-    opacity: 0;
-    transform: translateX(50%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0%);
-  }
+    0% {
+        opacity: 0;
+        transform: translateX(50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
 }
 /* ANIMATIONS */
 
@@ -228,10 +228,10 @@ ul li {
 }
 
 .img-content{
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
 }
 
 .img-content img {
@@ -241,35 +241,38 @@ ul li {
 .container {
     padding: 0 0 2%;
 }
+.bar {
+    fill: rgb(255, 187, 120);
+}
 .kennyText {
-  fill: whitesmoke;
+    fill: whitesmoke;
 }
 .bubLegend:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 #txTT2 {
-  position: absolute;
-  height: fit-content;
-  padding: 2px 20px;
-  z-index: 10;
-  border: 5px solid #a0a0a0;
-  background: whitesmoke;
-  border-radius: 19px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s;
+    position: absolute;
+    height: fit-content;
+    padding: 2px 20px;
+    z-index: 10;
+    border: 5px solid #a0a0a0;
+    background: whitesmoke;
+    border-radius: 19px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
 }
 #txTT2 p {
-  color: #262626;
-  white-space: nowrap;
+    color: #262626;
+    white-space: nowrap;
 }
 .bubble {
     stroke-width: 5px;
 }
 
 #txChart,#crimeChart {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 /* TEXT - HEADERS, PARAGRAPHS */
 
@@ -523,21 +526,6 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     padding: 5px 0 15px;
 }
 
-/* Family Tree Dashboard */
-.treemap-rect:hover {
-    cursor: pointer;
-    opacity: 0.9;
-}
-
-.node-text {
-    font-size: 10px;
-    fill: white;
-}
-
-#family-tree {
-    height: 30vw;
-}
-
 /* Team Section */
 .team {
     display: flex;
@@ -638,8 +626,8 @@ select {
 }
 
 #choropleth-option {
-   position: absolute;
-   left: 0px;
+    position: absolute;
+    left: 0px;
     width: 450px;
 
 }
