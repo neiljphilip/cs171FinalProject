@@ -190,6 +190,10 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     /** Dashboard 3 **/
     var globe = new dragGlobe("choropleth", mapTopJson, worldTsv, data1, data2, data3);
 
+    $('#choropleth-option').on('change', function() {
+        var selectVal =  d3.select("#choropleth-option").node().value;
+        globe.onUpdateData(selectVal);
+    });
     /* Clean data */
     // Cleaned in Excel.
 

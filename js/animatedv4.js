@@ -459,9 +459,10 @@ dragGlobe.prototype.updateVis = function() {
  * E.g. brush, inputs, event trigger from another visualization in the dashboard (apply parameters as necessary)
  */
 
-dragGlobe.prototype.onUpdateData = function() {
+dragGlobe.prototype.onUpdateData = function(option) {
     var vis = this;
 
+    console.log(option);
     console.log(vis);
    console.log("redraw");
    console.log(vis.svg);
