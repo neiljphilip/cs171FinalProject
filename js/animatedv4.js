@@ -22,6 +22,7 @@ dragGlobe = function(_parentElement, _data1, _data2, _data3, _data4, _data5) {
 dragGlobe.prototype.initVis = function() {
     var vis = this;
 
+
     vis.margin = { top: 40, right: 40, bottom: 40, left: 40 };
 
     vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right,
@@ -41,6 +42,7 @@ dragGlobe.prototype.initVis = function() {
 
     // SVG drawing area
     vis.svg = d3.select("#" + vis.parentElement).append("svg")
+        .attr("class", "changeClass")
         .attr("width", vis.width + vis.margin.left + vis.margin.right)
         .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
         .append("g")
@@ -83,11 +85,28 @@ dragGlobe.prototype.initVis = function() {
         .attr("class", "land")
         .attr("d", vis.path)
         .style("fill", function(d) {
+           var selectVal =  d3.select("#choropleth-option").node().value;
             var countryN = vis.countryById[d.id];
-            var legality = getLegality(countryN);
-            if (legality == "Legal") return "green";
-            else if (legality == "Illegal") return "red";
-            else return "d3d3d3";
+            if (selectVal == "legality") {
+                var legality = getLegality(countryN);
+                if (legality == "Legal") return "green";
+                else if (legality == "Illegal") return "red";
+                else return "d3d3d3";
+            } else {
+                var attitude = getAtt(countryN);
+
+                if (attitude == "permissive") {
+                    return "#6ed4f0";
+                } else if (attitude == "contentious") {
+                   return "yellow";
+                } else if (attitude == "hostile") {
+                    return "#ff6200";
+                } else if (attitude == "none") {
+                    return "#d3d3d3";
+                }
+
+            }
+
         })
 
     //Drag event
@@ -399,7 +418,7 @@ vis.svg.append("text")
         p.innerHTML = html;
     }
 
-    vis.wrangleData();
+//    vis.wrangleData();
 };
 
 /*
@@ -413,7 +432,7 @@ dragGlobe.prototype.wrangleData = function() {
 
 
     // Update the visualization
-    vis.updateVis();
+  //  vis.updateVis();
 };
 
 /*
@@ -443,16 +462,12 @@ dragGlobe.prototype.updateVis = function() {
 dragGlobe.prototype.onUpdateData = function() {
     var vis = this;
 
+    console.log(vis);
    console.log("redraw");
-     vis.svg.selectAll("path.land")
-        .style("fill", function(d) {
-            return "purple";
-            var countryN = vis.countryById[d.id];
-            var legality = getLegality(countryN);
-            if (legality == "Legal") return "green";
-            else if (legality == "Illegal") return "red";
-            else return "d3d3d3";
-        });
+   console.log(vis.svg);
+ //  var selector = d3.select(".changeClass");
+ //  console.log(selector);
+  // selector.selectAll("land").attr("fill", "red");
 
 
     // Update vis.filteredData
