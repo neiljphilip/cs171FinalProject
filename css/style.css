@@ -249,6 +249,10 @@ ul li {
 .bubLegend:hover {
     cursor: pointer;
 }
+.clickImg {
+  max-width: 80%;
+  border-radius: 0% !important;
+}
 #txTT2 {
     position: absolute;
     height: fit-content;
