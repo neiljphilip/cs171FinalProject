@@ -87,7 +87,13 @@ TransactionChart.prototype.initVis = function() {
             }
             return 0;
         });
-
+    vis.svg.append("text")
+    		.attr("class", "kennyText")
+    		.attr("x", vis.width)
+    		.attr("y", vis.height - 12)
+    		.attr("text-anchor", "end")
+    		.style("font-size", "12px")
+    		.text("Transaction speed data as of 2018");
     vis.legend.selectAll('text')
         .data(vis.data)
         .enter()
