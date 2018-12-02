@@ -38,10 +38,12 @@ TransactionChart.prototype.initVis = function() {
         .domain(d3.extent(vis.data, function(d) { return d.txs; }))
         .range([0, vis.width]);
 
+    // Scale for the radius
     vis.r = d3.scaleLinear()
         .domain(d3.extent(vis.data, function(d) { return d.txs; }))
         .range([20, 120]);
 
+    // Force stuff
     vis.force = d3.forceSimulation(vis.data)
         .force('charge', d3.forceManyBody().strength(5))
         .force("center", d3.forceCenter().x(vis.width / 2).y(vis.height / 2))
@@ -50,6 +52,7 @@ TransactionChart.prototype.initVis = function() {
         }))
         .force('radial', d3.forceRadial().radius(80).x(vis.width / 2).y(vis.height / 2));
 
+    // Legend
     vis.legend = vis.svg.append('g')
         .attr('class', 'bubble-legend');
 
@@ -87,13 +90,7 @@ TransactionChart.prototype.initVis = function() {
             }
             return 0;
         });
-    vis.svg.append("text")
-    		.attr("class", "kennyText")
-    		.attr("x", vis.width)
-    		.attr("y", vis.height - 12)
-    		.attr("text-anchor", "end")
-    		.style("font-size", "12px")
-    		.text("Transaction speed data as of 2018");
+
     vis.legend.selectAll('text')
         .data(vis.data)
         .enter()
@@ -103,6 +100,16 @@ TransactionChart.prototype.initVis = function() {
         .attr('y', function(d, i) { return i * 30 + 16; })
         .text(function(d) { return d.coin; });
 
+    // Data caption
+    vis.svg.append("text")
+        .attr("class", "kennyText")
+        .attr("x", vis.width)
+        .attr("y", vis.height - 12)
+        .attr("text-anchor", "end")
+        .style("font-size", "12px")
+        .text("Transaction speed data as of 2018");
+
+    // tooltips
     vis.tip = d3.tip()
         .attr('class', 'd3-tip')
         .html(function(d) {
@@ -144,6 +151,8 @@ TransactionChart.prototype.updateVis = function() {
     vis.svg.call(vis.tip);
 
     /* Draw vis using vis.displayData */
+
+    // Draw nodes
     vis.nodesSvg = vis.svg.selectAll(".bubble")
         .data(vis.displayData, function(d) { return d.coin; });
 
@@ -165,6 +174,7 @@ TransactionChart.prototype.updateVis = function() {
     vis.nodes.on('mouseover', vis.tip.show)
         .on('mouseout', vis.tip.hide);
 
+    // Draw node labels
     vis.labelsSvg = vis.svg.selectAll(".bubble-text")
         .data(vis.displayData, function(d) { return d.coin; });
 
@@ -179,6 +189,7 @@ TransactionChart.prototype.updateVis = function() {
     vis.nodesSvg.exit().transition().attr('r', 0).remove();
     vis.labelsSvg.exit().transition().attr('font-size', 0).remove();
 
+    // force simulation
     vis.force.on("tick", function() {
         // Update node coordinates
         vis.nodes.attr("cx", function(d) { return d.x; })
@@ -189,6 +200,7 @@ TransactionChart.prototype.updateVis = function() {
             .attr("y", function(d) { return d.y + 5; });
     });
 
+    // update legend for traditional processors
     vis.legend.selectAll('.traditional')
         .attr('fill', function(d) {
             if (!vis.showTraditional && (d.coin === 'Visa' || d.coin === 'PayPal')) {
@@ -209,12 +221,6 @@ TransactionChart.prototype.updateVis = function() {
             }
             return 0;
         });
-
-    // Enter, update, exit
-
-    // Draw axes (if applicable)
-
-    // Draw legend (if applicable)
 };
 
 /*
