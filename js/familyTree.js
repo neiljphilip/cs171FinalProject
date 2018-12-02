@@ -30,7 +30,7 @@ FamilyTree.prototype.initVis = function() {
         .attr('class', 'tree-SVG')
         .append('g')
         .attr('class', 'tree-g')
-        .attr('font-size', 10)
+        .attr('font-size', 10);
 
     // links group
     vis.svg.append('g')

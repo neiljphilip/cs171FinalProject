@@ -49,9 +49,12 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         return [treeDateParse(key), coinTreeJSON[key]];
     });
 
-    // Create visualization instances
-    var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
-    var familyTree = new FamilyTree("family-tree", coinTreeFilteredData, treeLineChart);
+    // Create visualization instances (called in setHashTimeout)
+
+    function createTreeandChart() {
+        var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
+        var familyTree = new FamilyTree("family-tree", coinTreeFilteredData, treeLineChart);
+    }
 
 
 
@@ -332,8 +335,12 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         setTimeout(function() {
             var el = $('#' + id);
             el.find('.divider-line').animate({ height: '100px' });
-
             el.next().addClass('active');
+
+            if (id === "hash-block-0") {
+                createTreeandChart();
+            }
+
         }, timeToFindBlock)
     }
 
