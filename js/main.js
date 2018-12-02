@@ -220,7 +220,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         strings: [
             "<p>In 2008, the world reckoned with the coming of Bitcoin and the global introduction of cryptocurrency.</p><p>In 2018, it's hard to imagine a world without it.</p>"
         ],
-        typeSpeed: 0,
+        typeSpeed: -99999999999,
         contentType: 'html',
         loop: false
     });
