@@ -462,10 +462,34 @@ dragGlobe.prototype.updateVis = function() {
 dragGlobe.prototype.onUpdateData = function(option) {
     var vis = this;
 
-    console.log(option);
-    console.log(vis);
-   console.log("redraw");
-   console.log(vis.svg);
+
+ //   console.log("wtf");
+
+    vis.svg.selectAll("path.land")
+        .style("fill", function(d) {
+            var selectVal =  d3.select("#choropleth-option").node().value;
+            var countryN = vis.countryById[d.id];
+            if (selectVal == "legality") {
+                var legality = getLegality(countryN);
+                if (legality == "Legal") return "green";
+                else if (legality == "Illegal") return "red";
+                else return "d3d3d3";
+            } else {
+                var attitude = getAtt(countryN);
+
+                if (attitude == "permissive") {
+                    return "#6ed4f0";
+                } else if (attitude == "contentious") {
+                    return "yellow";
+                } else if (attitude == "hostile") {
+                    return "#ff6200";
+                } else if (attitude == "none") {
+                    return "#d3d3d3";
+                }
+
+            }
+        });
+
  //  var selector = d3.select(".changeClass");
  //  console.log(selector);
   // selector.selectAll("land").attr("fill", "red");
@@ -474,6 +498,32 @@ dragGlobe.prototype.onUpdateData = function(option) {
     // Update vis.filteredData
 
   //  vis.wrangleData();
+
+    function getAtt(countryN) {
+        var att = vis.attitude[vis.attitude.findIndex(item => item.Nation === countryN)];
+        if (att === undefined) {
+            return "none";
+        } else {
+            return att.Status;
+        }
+
+    }
+
+
+    function getLegality(countryN) {
+        var att = vis.legality[vis.legality.findIndex(item => item.Country === countryN)];
+        if (att === undefined) {
+            return "none";
+        } else {
+            return att.Legal;
+        }
+
+    }
+
+    function getCountry(countryN) {
+        return vis.volume[vis.volume.findIndex(item => item.Country === countryN)];
+    }
+
 };
 
 
