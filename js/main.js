@@ -108,8 +108,6 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
 
     allCoins = Array.from([... new Set(cryptoFinanceData.map(function(d) { return d.Coin; }))]);
     coinColorScale.domain(allCoins);
-    // console.log(cryptoFinanceData);
-    // console.log(volumeByData);
 
     /* Create visualization instances */
     var FinanceDashboardEventHandler = {};
@@ -209,24 +207,6 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         var selectVal =  d3.select("#choropleth-option").node().value;
         globe.onUpdateData(selectVal);
     });
-    /* Clean data */
-    // Cleaned in Excel.
-
-  /*  queue()
-        .defer(d3.json,"data/world-110m.json")
-        .defer(d3.tsv, "data/world-110m-country-names.tsv")
-        .defer(d3.csv, "data/attitude.csv")
-        .defer(d3.csv, "data/legality.csv")
-        .defer(d3.csv, "data/cryptoPercent.csv")
-        .await(function(error, mapTopJson, worldTsv, data1, data2, data3) {
-            //var regChoropleth = new Choropleth("choropleth", data1, data2, mapTopJson);
-           // var dragGlobe = new animatedGlobe("choropleth", data1, data2, "data/countries.geo.json");
-            var globe = new dragGlobe("choropleth", mapTopJson, worldTsv, data1, data2, data3);
-        });
-*/
-    /* Create visualization instances */
-
-
 
     /* Bind event handlers */
 
@@ -291,6 +271,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         });
     });
 
+    // Scrolling triggers for hashes
     var windowHeight = $(window).height();
     $(window).scroll(function() {
         triggerHashes($(this).scrollTop(), windowHeight);
@@ -382,10 +363,12 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         }, timeToFindBlock)
     }
 
+    // get random hash
     function getHash() {
         return faker.finance.bitcoinAddress();
     }
 
+    // get random hex value
     function getHexadecimal() {
         var max = 10000000000;
         var min = 100000000;
@@ -407,6 +390,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         window.setTimeout(internalCallback, factor);
     }
 
+    /* Functions for getting the reused HTML elements for hash stuff */
     function getBlockStatus() {
         return "<div class='block-status'>Computing block hash...</div>";
     }
