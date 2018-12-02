@@ -369,7 +369,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         }, stringDelayVal, statusStrings.length);
 
         // Takes about 5 secs to find block
-        var timeToFindBlock = longGeneration ? 5000 : 500;
+        var timeToFindBlock = longGeneration ? 5000 : 2500;
         setTimeout(function() {
             var el = $('#' + id);
             el.find('.divider-line').animate({ height: dividerLength });
