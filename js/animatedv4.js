@@ -96,9 +96,9 @@ dragGlobe.prototype.initVis = function() {
                 var attitude = getAtt(countryN);
 
                 if (attitude == "permissive") {
-                    return "#6ed4f0";
+                    return "#169B92";
                 } else if (attitude == "contentious") {
-                   return "yellow";
+                   return "#ffd700";
                 } else if (attitude == "hostile") {
                     return "#ff6200";
                 } else if (attitude == "none") {
@@ -131,22 +131,8 @@ dragGlobe.prototype.initVis = function() {
                 .style("opacity", 1);
 
 
-            var css = '.land:hover { fill: #d3d3d3 }';
+            var css = '.land:hover { fill: yellow !important; }';
             // may break if country not in data!
-            var attitude = getAtt(countryN);
-
-            if (attitude == "permissive") {
-                css = '.land:hover { fill: #6ed4f0 !important; }';
-            } else if (attitude == "contentious") {
-                css = '.land:hover { fill: yellow !important; }';
-            } else if (attitude == "hostile") {
-                css = '.land:hover { fill: #ff6200 !important; }';
-            } else if (attitude == "none") {
-                css = '.land:hover { fill: black !important; }';
-            }
-
-            else css = '.land:hover { fill: red }';
-
             var style = document.createElement('style');
 
             if (style.styleSheet) {
@@ -173,7 +159,7 @@ dragGlobe.prototype.initVis = function() {
     vis.svg
         .append("rect")
         .attr("class", "legendBox")
-        .attr("x", vis.width - 80)
+        .attr("x", vis.width - 60)
         .attr("y", vis.height - 100)
         .attr("height", 20)
         .attr("width", 20)
@@ -185,7 +171,7 @@ dragGlobe.prototype.initVis = function() {
     vis.svg
         .append("rect")
         .attr("class", "legendBox")
-        .attr("x", vis.width - 80)
+        .attr("x", vis.width - 60)
         .attr("y", vis.height - 70)
         .attr("height", 20)
         .attr("width", 20)
@@ -195,7 +181,7 @@ dragGlobe.prototype.initVis = function() {
 
     vis.svg.append("text")
         .attr("class", "legLabel")
-        .attr("x", vis.width - 100)
+        .attr("x", vis.width - 80)
         .attr("y", vis.height - 110)
         .text(function(d) {
             return "Bitcoin Legality";
@@ -204,7 +190,7 @@ dragGlobe.prototype.initVis = function() {
     // text labels
 vis.svg.append("text")
         .attr("class", "legLabel")
-        .attr("x", vis.width - 50)
+        .attr("x", vis.width - 30)
         .attr("y", vis.height - 85)
         .text(function(d) {
            return "Legal";
@@ -213,14 +199,16 @@ vis.svg.append("text")
 
     vis.svg.append("text")
         .attr("class", "legLabel")
-        .attr("x", vis.width - 50)
+        .attr("x", vis.width - 30)
         .attr("y", vis.height - 55)
         .text(function(d) {
             return "Illegal";
         })
         .style("fill", "whitesmoke");
 
-    updateText("countryName", "Select Country");
+    updateText("countryName", "Country: ");
+    updateText("legality", "Bitcoin Legal Status: ");
+    updateText("att", "Public Opinion: ")
 
 
 
@@ -285,13 +273,13 @@ vis.svg.append("text")
         $("#legality").empty();
         $("#worldShare").empty();
         var countryN = vis.countryById[d.id];
-       updateText("countryName", countryN);
+       updateText("countryName", "Country: " + countryN);
        var legalValue = getLegality(countryN);
        if (legalValue == "none") {
-           updateText("legality", "Bitcoin Legality: No data available");
+           updateText("legality", "Bitcoin Legal Status: No data available");
            d3.select("#legality").style("color", "#d3d3d3");
        } else {
-           updateText("legality", "Bitcoin is " + legalValue + " in this country.");
+           updateText("legality", "Bitcoin Legal Status: " + legalValue);
            if (legalValue == "Legal")  d3.select("#legality").style("color", "green");
            else  d3.select("#legality").style("color", "red");
        }
@@ -302,18 +290,18 @@ vis.svg.append("text")
 
        if (attitudeVal == "permissive") {
               attStatement += "Permissive";
-           updateText("att", "Public is " + attStatement + " of crypto.");
-           d3.select("#att").style("color", "#6ed4f0");
+           updateText("att", "Public Opinion: " + attStatement);
+           d3.select("#att").style("color", "#169B92");
            } else if (attitudeVal == "contentious") {
               attStatement += "Contentious";
-           updateText("att", "Public is " + attStatement + " on crypto.");
-           d3.select("#att").style("color", "yellow");
+           updateText("att", "Public Opinion: " + attStatement);
+           d3.select("#att").style("color", "#ffd700");
            } else if (attitudeVal == "hostile") {
            attStatement += "Hostile";
-           updateText("att", "Public is " + attStatement + " to crypto.");
+           updateText("att", "Public Opinion: " + attStatement);
            d3.select("#att").style("color", "#ff6200");
        } else {
-           updateText("att", "Public Opinion: No data available.");
+           updateText("att", "Public Opinion: No data available");
            d3.select("#att").style("color", "#d3d3d3");
        }
 
@@ -379,7 +367,12 @@ vis.svg.append("text")
             .text(function(d) {
                 if (d.value > 0.06) {
                     if (d.value > 0.5) {
-                        return "World: " + d3.format(".1%")(d.value);
+                        var format = d3.format(".1%")(d.value);
+                        if (format == "100.0%") {
+                            $("#pie").empty();
+                            $("#worldShare").empty();
+                        }
+                        else return "World: " + format;
                     }
 
                     else
@@ -461,11 +454,161 @@ dragGlobe.prototype.updateVis = function() {
 
 dragGlobe.prototype.onUpdateData = function(option) {
     var vis = this;
+    var selectVal =  d3.select("#choropleth-option").node().value;
 
-    console.log(option);
-    console.log(vis);
-   console.log("redraw");
-   console.log(vis.svg);
+ //   console.log("wtf");
+    vis.svg.selectAll("path.land")
+        .style("fill", function(d) {
+
+            var countryN = vis.countryById[d.id];
+            if (selectVal == "legality") {
+                var legality = getLegality(countryN);
+                if (legality == "Legal") return "green";
+                else if (legality == "Illegal") return "red";
+                else return "d3d3d3";
+            } else {
+                var attitude = getAtt(countryN);
+
+                if (attitude == "permissive") {
+                    return "#169B92";
+                } else if (attitude == "contentious") {
+                    return "#ffd700";
+                } else if (attitude == "hostile") {
+                    return "#ff6200";
+                } else if (attitude == "none") {
+                    return "#d3d3d3";
+                }
+
+            }
+        });
+
+    d3.selectAll(".legendBox").remove();
+    $(".legLabel").empty();
+    if (selectVal == "legality") {
+
+        vis.svg
+            .append("rect")
+            .attr("class", "legendBox")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 100)
+            .attr("height", 20)
+            .attr("width", 20)
+            .style("fill", "green")
+            .style("stroke", "black")
+            .style("stroke-width", 2);
+
+
+        vis.svg
+            .append("rect")
+            .attr("class", "legendBox")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 70)
+            .attr("height", 20)
+            .attr("width", 20)
+            .style("fill", "red")
+            .style("stroke", "black")
+            .style("stroke-width", 2);
+
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 110)
+            .text(function(d) {
+                return "Bitcoin Legality";
+            })
+            .style("fill", "whitesmoke");
+        // text labels
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 50)
+            .attr("y", vis.height - 85)
+            .text(function(d) {
+                return "Legal";
+            })
+            .style("fill", "whitesmoke");
+
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 50)
+            .attr("y", vis.height - 55)
+            .text(function(d) {
+                return "Illegal";
+            })
+            .style("fill", "whitesmoke");
+
+    } else {
+        vis.svg
+            .append("rect")
+            .attr("class", "legendBox")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 100)
+            .attr("height", 20)
+            .attr("width", 20)
+            .style("fill", "#169B92")
+            .style("stroke", "black")
+            .style("stroke-width", 2);
+
+
+        vis.svg
+            .append("rect")
+            .attr("class", "legendBox")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 70)
+            .attr("height", 20)
+            .attr("width", 20)
+            .style("fill", "#ffd700")
+            .style("stroke", "black")
+            .style("stroke-width", 2);
+
+        vis.svg
+            .append("rect")
+            .attr("class", "legendBox")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 40)
+            .attr("height", 20)
+            .attr("width", 20)
+            .style("fill", "#ff6200")
+            .style("stroke", "black")
+            .style("stroke-width", 2);
+
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 110)
+            .text(function(d) {
+                return "Public Opinion";
+            })
+            .style("fill", "whitesmoke");
+
+        // text labels
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 50)
+            .attr("y", vis.height - 85)
+            .text(function(d) {
+                return "Permissive";
+            })
+            .style("fill", "whitesmoke");
+
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 50)
+            .attr("y", vis.height - 55)
+            .text(function(d) {
+                return "Contentious";
+            })
+            .style("fill", "whitesmoke");
+
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 50)
+            .attr("y", vis.height - 25)
+            .text(function(d) {
+                return "Hostile";
+            })
+            .style("fill", "whitesmoke");
+    }
+
  //  var selector = d3.select(".changeClass");
  //  console.log(selector);
   // selector.selectAll("land").attr("fill", "red");
@@ -474,7 +617,35 @@ dragGlobe.prototype.onUpdateData = function(option) {
     // Update vis.filteredData
 
   //  vis.wrangleData();
+
+    function getAtt(countryN) {
+        var att = vis.attitude[vis.attitude.findIndex(item => item.Nation === countryN)];
+        if (att === undefined) {
+            return "none";
+        } else {
+            return att.Status;
+        }
+
+    }
+
+
+    function getLegality(countryN) {
+        var att = vis.legality[vis.legality.findIndex(item => item.Country === countryN)];
+        if (att === undefined) {
+            return "none";
+        } else {
+            return att.Legal;
+        }
+
+    }
+
+    function getCountry(countryN) {
+        return vis.volume[vis.volume.findIndex(item => item.Country === countryN)];
+    }
+
 };
+
+
 
 
 
