@@ -159,7 +159,7 @@ dragGlobe.prototype.initVis = function() {
     vis.svg
         .append("rect")
         .attr("class", "legendBox")
-        .attr("x", vis.width - 60)
+        .attr("x", vis.width - 80)
         .attr("y", vis.height - 100)
         .attr("height", 20)
         .attr("width", 20)
@@ -171,11 +171,22 @@ dragGlobe.prototype.initVis = function() {
     vis.svg
         .append("rect")
         .attr("class", "legendBox")
-        .attr("x", vis.width - 60)
+        .attr("x", vis.width - 80)
         .attr("y", vis.height - 70)
         .attr("height", 20)
         .attr("width", 20)
         .style("fill", "red")
+        .style("stroke", "black")
+        .style("stroke-width", 2);
+
+    vis.svg
+        .append("rect")
+        .attr("class", "legendBox")
+        .attr("x", vis.width - 80)
+        .attr("y", vis.height - 40)
+        .attr("height", 20)
+        .attr("width", 20)
+        .style("fill", "#d3d3d3")
         .style("stroke", "black")
         .style("stroke-width", 2);
 
@@ -188,27 +199,37 @@ dragGlobe.prototype.initVis = function() {
         })
         .style("fill", "whitesmoke");
     // text labels
-vis.svg.append("text")
+    vis.svg.append("text")
         .attr("class", "legLabel")
-        .attr("x", vis.width - 30)
+        .attr("x", vis.width - 50)
         .attr("y", vis.height - 85)
         .text(function(d) {
-           return "Legal";
+            return "Legal";
         })
-    .style("fill", "whitesmoke");
+        .style("fill", "whitesmoke");
 
     vis.svg.append("text")
         .attr("class", "legLabel")
-        .attr("x", vis.width - 30)
+        .attr("x", vis.width - 50)
         .attr("y", vis.height - 55)
         .text(function(d) {
             return "Illegal";
         })
         .style("fill", "whitesmoke");
 
+    vis.svg.append("text")
+        .attr("class", "legLabel")
+        .attr("x", vis.width - 50)
+        .attr("y", vis.height - 25)
+        .text(function(d) {
+            return "No Data";
+        })
+        .style("fill", "whitesmoke");
+
+    // Static (grounding) text
     updateText("countryName", "Country: ");
     updateText("legality", "Bitcoin Legal Status: ");
-    updateText("att", "Public Opinion: ")
+    updateText("att", "Public Opinion: ");
 
 
 
@@ -242,6 +263,7 @@ vis.svg.append("text")
     spinning_globe();
 
 
+    // helper functions
     function getAtt(countryN) {
         var att = vis.attitude[vis.attitude.findIndex(item => item.Nation === countryN)];
         if (att === undefined) {
@@ -456,7 +478,7 @@ dragGlobe.prototype.onUpdateData = function(option) {
     var vis = this;
     var selectVal =  d3.select("#choropleth-option").node().value;
 
- //   console.log("wtf");
+    // repaint the choropleth
     vis.svg.selectAll("path.land")
         .style("fill", function(d) {
 
@@ -482,6 +504,8 @@ dragGlobe.prototype.onUpdateData = function(option) {
             }
         });
 
+    // handle legend changes
+
     d3.selectAll(".legendBox").remove();
     $(".legLabel").empty();
     if (selectVal == "legality") {
@@ -506,6 +530,17 @@ dragGlobe.prototype.onUpdateData = function(option) {
             .attr("height", 20)
             .attr("width", 20)
             .style("fill", "red")
+            .style("stroke", "black")
+            .style("stroke-width", 2);
+
+        vis.svg
+            .append("rect")
+            .attr("class", "legendBox")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 40)
+            .attr("height", 20)
+            .attr("width", 20)
+            .style("fill", "#d3d3d3")
             .style("stroke", "black")
             .style("stroke-width", 2);
 
@@ -536,12 +571,21 @@ dragGlobe.prototype.onUpdateData = function(option) {
             })
             .style("fill", "whitesmoke");
 
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 50)
+            .attr("y", vis.height - 25)
+            .text(function(d) {
+                return "No Data";
+            })
+            .style("fill", "whitesmoke");
+
     } else {
         vis.svg
             .append("rect")
             .attr("class", "legendBox")
             .attr("x", vis.width - 80)
-            .attr("y", vis.height - 100)
+            .attr("y", vis.height - 120)
             .attr("height", 20)
             .attr("width", 20)
             .style("fill", "#169B92")
@@ -553,7 +597,7 @@ dragGlobe.prototype.onUpdateData = function(option) {
             .append("rect")
             .attr("class", "legendBox")
             .attr("x", vis.width - 80)
-            .attr("y", vis.height - 70)
+            .attr("y", vis.height - 90)
             .attr("height", 20)
             .attr("width", 20)
             .style("fill", "#ffd700")
@@ -564,17 +608,28 @@ dragGlobe.prototype.onUpdateData = function(option) {
             .append("rect")
             .attr("class", "legendBox")
             .attr("x", vis.width - 80)
-            .attr("y", vis.height - 40)
+            .attr("y", vis.height - 60)
             .attr("height", 20)
             .attr("width", 20)
             .style("fill", "#ff6200")
             .style("stroke", "black")
             .style("stroke-width", 2);
 
+        vis.svg
+            .append("rect")
+            .attr("class", "legendBox")
+            .attr("x", vis.width - 80)
+            .attr("y", vis.height - 30)
+            .attr("height", 20)
+            .attr("width", 20)
+            .style("fill", "#d3d3d3")
+            .style("stroke", "black")
+            .style("stroke-width", 2);
+
         vis.svg.append("text")
             .attr("class", "legLabel")
             .attr("x", vis.width - 80)
-            .attr("y", vis.height - 110)
+            .attr("y", vis.height - 130)
             .text(function(d) {
                 return "Public Opinion";
             })
@@ -584,7 +639,7 @@ dragGlobe.prototype.onUpdateData = function(option) {
         vis.svg.append("text")
             .attr("class", "legLabel")
             .attr("x", vis.width - 50)
-            .attr("y", vis.height - 85)
+            .attr("y", vis.height - 105)
             .text(function(d) {
                 return "Permissive";
             })
@@ -593,7 +648,7 @@ dragGlobe.prototype.onUpdateData = function(option) {
         vis.svg.append("text")
             .attr("class", "legLabel")
             .attr("x", vis.width - 50)
-            .attr("y", vis.height - 55)
+            .attr("y", vis.height - 75)
             .text(function(d) {
                 return "Contentious";
             })
@@ -602,9 +657,18 @@ dragGlobe.prototype.onUpdateData = function(option) {
         vis.svg.append("text")
             .attr("class", "legLabel")
             .attr("x", vis.width - 50)
-            .attr("y", vis.height - 25)
+            .attr("y", vis.height - 45)
             .text(function(d) {
                 return "Hostile";
+            })
+            .style("fill", "whitesmoke");
+
+        vis.svg.append("text")
+            .attr("class", "legLabel")
+            .attr("x", vis.width - 50)
+            .attr("y", vis.height - 15)
+            .text(function(d) {
+                return "No Data";
             })
             .style("fill", "whitesmoke");
     }
