@@ -79,12 +79,41 @@ ul li {
     opacity: 1;
 }
 
+.section.intro-section {
+    margin-top: 50px;
+    padding: 50px 30px;
+}
+
 /* Section divider and hash stuff */
 .section-divider {
     position: relative;
     display: flex;
     height: 100px;
     align-items: center;
+}
+
+.section-divider.xlarge {
+    height: 300px;
+}
+
+.section-divider.xlarge .divider-line-wrapper {
+    height: 300px;
+}
+
+.section-divider.large {
+    height: 200px;
+}
+
+.section-divider.large .divider-line-wrapper {
+    height: 200px;
+}
+
+.section-divider.small {
+    height: 75px;
+}
+
+.section-divider.small .divider-line-wrapper {
+    height: 75px;
 }
 
 .section-divider > * {
@@ -372,6 +401,7 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
     width: 200px;
     text-align: center;
     font-size: 12px;
+    pointer-events: none;
 }
 
 #detailed-info:hover {
@@ -554,7 +584,7 @@ rect.candlestick-rect.green, rect.candlestick-line.green {
 #project-title {
     font-size: 40px;
     color: #f2bf40;
-    margin-top: 30px;
+    margin-top: 80px;
 }
 .water {
     fill: #00248F;

@@ -236,9 +236,28 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         var dividerLine = getSectionDividerLine();
         var hashBlock = getHashTable();
 
-        el.append(hashStatus);
-        el.append(dividerLine);
-        el.append(hashBlock);
+        var dividerLength = '100px';
+        if (el.hasClass('xlarge')) {
+            dividerLength = '300px';
+        } else if (el.hasClass('large')) {
+            dividerLength = '200px';
+        } else if (el.hasClass('small')) {
+            dividerLength = '75px';
+        }
+
+        if (el.hasClass('no-delay')) {
+            el.append(dividerLine);
+            el.find('.divider-line').animate({ height: dividerLength });
+        } else if (el.hasClass('no-delay-with-text')) {
+            el.append(hashStatus);
+            el.append(dividerLine);
+            el.append(hashBlock);
+            el.find('.divider-line').animate({ height: dividerLength });
+        } else {
+            el.append(hashStatus);
+            el.append(dividerLine);
+            el.append(hashBlock);
+        }
 
         var id = 'hash-block-' + hashBlockIndex;
         el.attr('id', id);
@@ -247,7 +266,9 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         hashBlockData.push({
             id: id,
             heightTop: el.offset().top,
-            hit: false
+            hit: false,
+            dividerLength: dividerLength,
+            longGeneration: el.hasClass('long-gen')
         });
     });
 
@@ -292,21 +313,22 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
                 hit = hashBlock.hit,
                 id = hashBlock.id;
 
-            if ((scrollTop > (hT - windowHeight + 50)) && !hit){
-                setHashTimeout(id);
+            if ((scrollTop > (hT - windowHeight + 250)) && !hit){
+                setHashTimeout(id, hashBlock.dividerLength, hashBlock.longGeneration);
                 hashBlockData[i].hit = true;
             }
         }
     }
 
-    function setHashTimeout(id) {
+    function setHashTimeout(id, dividerLength, longGeneration) {
+        var textDelayVal = longGeneration ? 10 : 5;
         var totalHashes = 25;
         setDeceleratingTimeout(function() {
             var el = $('#' + id);
             el.find('.block-hash').text(getHash());
             el.find('.block-nonce').text(getHexadecimal());
             el.find('.block-bits').text(getHexadecimal());
-        }, 10, totalHashes);
+        }, textDelayVal, totalHashes);
 
         var statusStrings = [
             "Generating cryptographic nonce...",
@@ -314,6 +336,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
             "Found a new block!"
         ];
         var curStatus = 0;
+        var stringDelayVal = longGeneration ? 1000 : 500;
         setDeceleratingTimeout(function() {
             var el = $('#' + id);
             el.find('.block-status').text(statusStrings[curStatus]);
@@ -324,13 +347,13 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
                     el.find('.block-status').animate({ opacity: 0 });
                 }, 1000);
             }
-        }, 1000, statusStrings.length);
+        }, stringDelayVal, statusStrings.length);
 
         // Takes about 5 secs to find block
-        var timeToFindBlock = 500;
+        var timeToFindBlock = longGeneration ? 5000 : 2500;
         setTimeout(function() {
             var el = $('#' + id);
-            el.find('.divider-line').animate({ height: '100px' });
+            el.find('.divider-line').animate({ height: dividerLength });
 
             el.next().addClass('active');
         }, timeToFindBlock)
