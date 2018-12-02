@@ -81,7 +81,7 @@ FinanceTimeline.prototype.initVis = function() {
         .attr("x", -40)
         .attr("y", vis.height + 35)
         .attr('class', 'axis-label caption-label')
-        .text('Drag along the historical timeline to focus the volume chart. Click the arrows to move back and forth in the detailed view.');
+        .text('Drag along the historical timeline to focus the volume chart. Click the arrows to move back and forth several months in the detailed view.');
 
     // Line svg
     vis.lineSvg = vis.svg.append('g')
