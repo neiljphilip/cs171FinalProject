@@ -34,6 +34,7 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
     /** Dashboard 1 **/
 
     // Clean Data
+
     var treeDateParse = d3.timeParse('%m-%Y');
 
     var coinTreeFilteredData = Object.keys(coinTreeFilteredJSON).map(function(key) {
@@ -48,13 +49,17 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         return [treeDateParse(key), coinTreeJSON[key]];
     });
 
-    // Create visualization instances
-    var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
-    var familyTree = new FamilyTree("family-tree", coinTreeFilteredData, treeLineChart);
+    // Create visualization instances (called in setHashTimeout)
+    function createTreeandChart() {
+        var treeLineChart = new TreeLineChart('tree-linechart', coinTreeData);
+        var familyTree = new FamilyTree("family-tree", coinTreeFilteredData, treeLineChart);
 
+        /* Bind event handlers */
+        $('#tree-reset-button').on('click', function() {
+            familyTree.onResetClick();
+        });
+    }
 
-
-    /* Bind event handlers */
 
     /** Dashboard 2 - Financial Data **/
 
@@ -358,8 +363,12 @@ function createVis(error, financialData, crimeData, coinTreeJSON, coinTreeFilter
         setTimeout(function() {
             var el = $('#' + id);
             el.find('.divider-line').animate({ height: dividerLength });
-
             el.next().addClass('active');
+
+            if (el.next()["0"].id === "family-tree-container") {
+                createTreeandChart();
+            }
+
         }, timeToFindBlock)
     }
 
